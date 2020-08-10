@@ -6,7 +6,11 @@ import {
   Loading,
   Message,
   Tabs,
-  TabPane
+  TabPane,
+  Form,
+  FormItem,
+  Input,
+  Button
 } from 'element-ui'
 
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
@@ -17,6 +21,10 @@ Vue.use(Dialog)
   .use(Loading.directive)
   .use(Tabs)
   .use(TabPane)
+  .use(Input)
+  .use(Button)
+  .use(Form)
+  .use(FormItem)
 Vue.component(CollapseTransition.name, CollapseTransition)
 
 Vue.prototype.$loading = Loading.service

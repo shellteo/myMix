@@ -30,6 +30,8 @@ module.exports = app => {
   router.post('/api/exchange/removeLiquidty', passport, controller.exchange.removeLiquidty);
   router.post('/api/exchange/oktToTokenInput', passport, controller.exchange.oktToTokenInput);
   router.post('/api/exchange/tokenToOktInput', passport, controller.exchange.tokenToOktInput);
+  // user
+  router.post('/api/user/balance', passport, controller.user.balance);
 
   router.get('/test', controller.test.list);
   router.resources('/token', controller.token);
