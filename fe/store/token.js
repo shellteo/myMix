@@ -1,8 +1,8 @@
 /**
  * For MetaMask(ETH) Only
  */
-import socialMoney from '@/api/eth/contract.js'
-import { isEmptyAddress } from '@/utils/index'
+// import socialMoney from '@/api/eth/contract.js'
+// import { isEmptyAddress } from '@/utils/index'
 export const state = () => {
   return {
     symbol: '',
@@ -32,7 +32,7 @@ export const mutations = {
 }
 
 export const actions = {
-  async getTokenInfo({ commit }, tokenAddress) {
+  /* async getTokenInfo({ commit }, tokenAddress) {
     const tokenInstance = socialMoney.erc20Instance(tokenAddress)
     const totalSupply = await tokenInstance.methods.totalSupply().call()
     // const owner = await tokenInstance.methods.owner().call()
@@ -56,5 +56,5 @@ export const actions = {
       dispatch('getTokenInfo', tokenAddress)
       dispatch('getExchange', tokenAddress)
     }
-  }
+  } */
 }

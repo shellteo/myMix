@@ -45,7 +45,8 @@ export default {
   */
   plugins: [
     '~/plugins/vue_components.js',
-    '~/plugins/element-ui.js'
+    '~/plugins/element-ui.js',
+    '~/plugins/combined-inject.js'
   ],
   /*
   ** Nuxt.js dev-modules

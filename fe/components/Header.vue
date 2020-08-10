@@ -37,7 +37,7 @@
         </h1>
         <h2 class="site-description">实现独立于平台的网络价值</h2>
       </a>
-      <Web3Status />
+      <!-- <Web3Status /> -->
       <!-- <div class="header-location">
         <span v-if="metamask.isConnected" class="account-span">account: {{ metamask.account }}</span>
         <a v-else href="javascript:void(0)" class="location section-heading" @click="login"> Login With MetaMask </a>
@@ -147,11 +147,11 @@
   </header>
 </template>
 <script>
-import Web3Status from './Web3Status'
+// import Web3Status from './Web3Status'
 import consts from '@/utils/consts'
 export default {
   components: {
-    Web3Status
+    // Web3Status
   },
   data() {
     return {

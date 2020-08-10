@@ -48,7 +48,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import socialMoney from '@/api/eth/contract.js'
+// import socialMoney from '@/api/eth/contract.js'
 import IssueLoading from '@/components/Loading'
 export default {
   components: {
@@ -80,7 +80,7 @@ export default {
   },
   methods: {
     async issueToken() {
-      this.show = true
+      /* this.show = true
       const web3 = window.web3
       const coinbase = await web3.eth.getCoinbase()
       const instance = socialMoney.factoryContractInstance()
@@ -95,7 +95,7 @@ export default {
       await this.$store.dispatch('token/getTokenWithAccount', this.metamask.account)
       this.$router.push({
         name: 'mytoken'
-      })
+      }) */
     }
   }
 }
