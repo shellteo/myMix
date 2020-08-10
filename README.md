@@ -1,10 +1,23 @@
-# Backend
+# MixSwap
 
-## QuickStart
+## Introduction
+MixSwap is an on-chain system of smart contracts on the okchain blockchain, implementing an automated liquidity protocol based on a “constant product formula”. 
+Traders pay a 30-basis-point fee on trades, which goes to liquidity providers. Supporting only pairs between Token on okchain and OKT.
 
-<!-- add docs here for user -->
 
-see [egg docs][egg] for more detail.
+## Swap And Add Liquidity
+A small liquidity provider fee (0.30%) is taken out of each trade and added to the reserves. While the OKT-Token reserve ratio is constantly shifting, fees makes sure that the total combined reserve size increases with every trade. This functions as a payout to liquidity providers that is collected when they burn their pool tokens to withdraw their portion of total reserves. Guaranteed arbitrage opportunities from price fluctuations should push a steady flow of transactions through the system and increase the amount of fee revenue generated.
+
+
+![swap](./imgs/swap.jpg)
+![addLiquidity](./imgs/addLiquidity.jpg)
+
+## Sign up And Sign In
+You can create a account using this system and sign in!
+
+![sign up](./imgs/signup.jpg)
+![mnemonic](./imgs/mnemonic.jpg)
+![sign in](./imgs/signin.jpg)
 
 ### Development
 
@@ -28,9 +41,3 @@ $ npm stop
 - Use `npm run autod` to auto detect dependencies upgrade, see [autod](https://www.npmjs.com/package/autod) for more detail.
 
 
-
-1. exchange servie各个函数传参修改，是否需要username，to_address命名修改
-2. exchange数据库表的修改，改成total_supply
-3. exchange_liquidity_log数据库表的修改，liquidity允许负数
-4. okex service错误处理返回，以至于影响到exchange service的错误处理
-5. sequelize的锁和事务的测试，是否可以使用，update返回值的数据是什么，如何判断
