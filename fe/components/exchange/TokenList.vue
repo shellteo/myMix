@@ -58,7 +58,7 @@
 
 <script>
 /* eslint-disable */
-import { CNY } from './consts.js'
+import { OKT } from './consts.js'
 
 import utils from '@/utils/index'
 import throttle from 'lodash/throttle'

@@ -151,7 +151,7 @@
 <script>
 import debounce from 'lodash/debounce'
 import TokenListModal from './TokenList'
-import { CNY, INPUT } from './consts.js'
+import { OKT, INPUT } from './consts.js'
 
 // import utils from '@/utils/index'
 
@@ -166,7 +166,7 @@ export default {
       field: '', // INPUT OUTPUT
       form: {
         input: '',
-        inputToken: CNY,
+        inputToken: OKT,
         output: '',
         outputToken: {}
       },

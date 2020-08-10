@@ -104,7 +104,7 @@
         >
           <template v-if="outputPoolSize.cny_amount !== 0">
             <div class="kroqsf">
-              {{ outputPoolSize.cny_amount.toFixed(4) }} CNY
+              {{ outputPoolSize.cny_amount.toFixed(4) }} OKT
             </div>
             <div class="jlBXmz">
               +
@@ -147,17 +147,17 @@
       <div class="exKIZr" />
       <div class="lfiYXW">
         <span class="sc-hORach icyNSS">Price</span>
-        <span v-if="exchangeRate">1 CNY = {{ exchangeRate }} {{ form.outputToken.symbol }}</span>
+        <span v-if="exchangeRate">1 OKT = {{ exchangeRate }} {{ form.outputToken.symbol }}</span>
         <span v-else> - </span>
       </div>
       <div class="lfiYXW">
         <span class="sc-hORach icyNSS">当前流动金池总量</span>
-        <span v-if="form.outputToken.symbol">{{ currentPoolSize.cny_amount }} CNY + {{ currentPoolSize.token_amount }} {{ form.outputToken.symbol }}</span>
+        <span v-if="form.outputToken.symbol">{{ currentPoolSize.cny_amount }} OKT + {{ currentPoolSize.token_amount }} {{ form.outputToken.symbol }}</span>
         <span v-else> - </span>
       </div>
       <div class="lfiYXW">
         <span class="sc-hORach icyNSS">你占流动金池份额 （{{ yourPercent }}）</span>
-        <span v-if="form.outputToken.symbol">{{ yourPoolSize.cny_amount }} CNY + {{ yourPoolSize.token_amount }} {{ form.outputToken.symbol }}</span>
+        <span v-if="form.outputToken.symbol">{{ yourPoolSize.cny_amount }} OKT + {{ yourPoolSize.token_amount }} {{ form.outputToken.symbol }}</span>
         <span v-else> - </span>
       </div>
     </div>
@@ -178,7 +178,7 @@
         <div>
           你正在添加
           <span class="iDChvK">
-            <span class="jbXIaP">{{ form.input }} CNY</span>
+            <span class="jbXIaP">{{ form.input }} OKT</span>
           </span> 和最多
           <span class="iDChvK">
             <span class="jbXIaP">{{ limitValue }} {{ form.outputToken.symbol }}</span>
@@ -225,7 +225,7 @@
 import debounce from 'lodash/debounce'
 import TokenListModal from './TokenList'
 import PoolSelectModal from './PoolSelect'
-import { CNY, INPUT } from './consts.js'
+import { OKT, INPUT } from './consts.js'
 
 // import utils from '@/utils/index'
 
@@ -243,7 +243,7 @@ export default {
       orderShow: false,
       form: {
         input: '',
-        inputToken: CNY,
+        inputToken: OKT,
         output: '',
         outputToken: {}
       },
@@ -325,7 +325,7 @@ export default {
       // 修改form，重置
       this.form = {
         input: '',
-        inputToken: CNY,
+        inputToken: OKT,
         output: '',
         outputToken: {}
       }
