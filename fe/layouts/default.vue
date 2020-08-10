@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <nuxt />
     <AuthModal v-model="loginModalShow" :type="loginModalType" :title="loginModalTitle" />
   </div>
@@ -27,3 +27,8 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+.container {
+    background-color: rgb(44, 47, 54);
+}
+</style>

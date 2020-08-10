@@ -1,5 +1,6 @@
 <template>
-  <div class="main exchange">
+  <div id="site-wrapper" class="main exchange">
+    <Header />
     <div class="outer-container">
       <div class="p-w">
         <el-tabs
@@ -28,10 +29,12 @@
 <script>
 import Swap from '@/components/exchange/Swap'
 import Pool from '@/components/exchange/Pool'
+import Header from '@/components/MixHeader'
 export default {
   components: {
     Swap,
-    Pool
+    Pool,
+    Header
   },
   data() {
     return {
@@ -61,6 +64,18 @@ export default {
 $bg-color: rgb(33, 36, 41);;
 $purpleDark: red;
 $borderRadius6: 6px;
+#site-wrapper {
+  padding:1.5vw;
+  width:100%;
+  max-width:1750px;
+  margin:0 auto;
+  position:relative;
+  overflow:hidden;
+  transform-origin:center bottom;
+  background-color: rgb(44, 47, 54);
+  background-size:300px 300px;
+  background-repeat:repeat
+}
 .exchange {
   background: rgb(44, 47, 54);
   background-color: rgb(44, 47, 54);
@@ -80,7 +95,7 @@ $borderRadius6: 6px;
   }
   .el-tabs--border-card>.el-tabs__header .el-tabs__item.is-active {
     color: white;
-    background-color: red;
+    background-color: $purpleDark;
   }
   .el-tabs__nav {
     display: flex;
