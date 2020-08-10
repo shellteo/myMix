@@ -5,40 +5,45 @@ const fs = require('fs');
 const moment = require('moment');
 
 class UserService extends Service {
-  async create({ email, password }) {
+  async create({ username, password }) {
     const { ctx } = this;
-    const userRow = await ctx.model.User.find({ where: { email } });
+    const userRow = await ctx.model.User.find({ where: { username } });
     if (userRow !== null) {
-      return ctx.msg.mailHadUsed;
+      return ctx.msg.nameHadUsed;
     }
-    const ret = ctx.msg.success;
-    // const nowUnixTime = ctx.helper.nowUnixTime();
+    const { address, pubkey, mnemonic } = await ctx.service.okex.createAccount(username);
     const now = moment().format('YYYY-MM-DD HH:mm:ss');
     const createResult = await ctx.model.User.create({
-      email,
-      email_status: 1,
-      level: 1,
-      status: 1,
+      username,
       password: ctx.helper.md5(password),
+      address,
+      pubkey,
+      mnemonic,
       create_time: now,
       last_login_time: now,
+      reg_ip: ctx.ip,
       last_login_ip: ctx.ip,
     });
-    ret.data = createResult;
-    return ret;
+    ctx.logger.info('user.create success result: ', createResult);
+    return {
+      ...ctx.msg.success,
+      data: {
+        username,
+        address,
+      },
+    };
   }
-  async find(email) {
+  async find(username) {
     const { ctx } = this;
-    return ctx.model.User.find({ where: { email } });
+    return ctx.model.User.find({ where: { username } });
   }
-  async update({ nickname = null, introduction = null, avatar = null }, email) {
+  async update({ nickname = null, avatar = null }, username) {
     const { ctx } = this;
     const updates = {};
     if (nickname) updates.nickname = nickname;
-    if (introduction) updates.introduction = introduction;
     if (avatar) updates.avatar = avatar;
     ctx.model.User.update(updates, {
-      where: { email },
+      where: { username },
     });
   }
   async uploadImage(filename, filelocation) {

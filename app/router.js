@@ -4,33 +4,44 @@
  * @param {Egg.Application} app - egg application
  */
 module.exports = app => {
-  // 前端jwt鉴权
+  // jwt passport
   const passport = app.middleware.passport({ management: false });
   // geetest
   const gtVerify = app.middleware.geetest();
-  // 加载app
+  // load app
   require('./validate')(app);
 
   const { router, controller } = app;
-  router.post('/api/user/register', gtVerify, controller.user.register);
-  router.post('/api/user/login', gtVerify, controller.user.login);
+  router.post('/api/user/register', controller.user.register);
+  router.post('/api/user/login', controller.user.login);
   router.get('/api/user/info', passport, controller.user.userInfo);
   router.put('/api/user/info', passport, controller.user.update);
   router.post('/api/upload', passport, controller.user.upload);
-  // comment
-  // mail，geetest校验
+  // mail geetest verify
   router.post('/api/mail', gtVerify, controller.mail.send);
 
   /* -----------------geetest------------------ */
   router.get('/gt/register-slide', controller.geetest.register);
   router.post('/gt/validate-slide', controller.geetest.validate);
 
+  /* -----------------exchanges------------------ */
+  router.post('/api/exchange', passport, controller.exchange.create);
+  router.post('/api/exchange/addLiquidity', passport, controller.exchange.addLiquidty);
+  router.post('/api/exchange/removeLiquidty', passport, controller.exchange.removeLiquidty);
+  router.post('/api/exchange/oktToTokenInput', passport, controller.exchange.oktToTokenInput);
+  router.post('/api/exchange/tokenToOktInput', passport, controller.exchange.tokenToOktInput);
+
   router.get('/test', controller.test.list);
   router.resources('/token', controller.token);
-  // router.post('/test/token/create', controller.token.create);
   router.get('/exchange/list', controller.token.getExchangeList);
   router.get('/api/token/info', controller.okex.queryTokenInfo);
   router.get('/api/key/list', controller.okex.keyList);
   router.post('/api/recover', controller.okex.recover);
   router.get('/api/account', controller.okex.queryAccount);
+  router.post('/api/multi', controller.okex.multiTransfer);
+  router.get('/api/queryAccountBalance', controller.okex.queryAccountBalance);
+  router.get('/test1', controller.okex.test1);
+  router.get('/test2', controller.okex.test2);
+  router.get('/test3', controller.okex.test3);
+  router.get('/test4', controller.okex.test4);
 };

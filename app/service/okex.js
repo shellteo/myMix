@@ -22,10 +22,16 @@ class OkexService extends Service {
       });
     });
   }
-  async queryTokenInfo() {
-    const symbol = 'zxt-20a';
+  async queryTokenInfo(symbol) {
     const cmd = `okchaincli query token info ${symbol}`;
-    return this.genPromise(cmd);
+    let token = null;
+    try {
+      token = await this.genPromise(cmd);
+      return token;
+    } catch (error) {
+      return null;
+    }
+    // return this.genPromise(cmd);
   }
   async issueToken(symbol, totalSupply, wholeName, desc) {
     const cmd = `okchaincli tx token issue --from zxplus --symbol ${symbol} --total-supply ${totalSupply} --whole-name '${wholeName}' --desc '${desc}' -b block --mintable --fees=0.002tokt`;
@@ -33,7 +39,16 @@ class OkexService extends Service {
   }
   async transfer(from, to, amount, symbol) {
     const am_sy = '' + amount + symbol;
-    const cmd = `okchaincli tx send ${from} ${to} ${am_sy} --fees=0.002tokt`;
+    const cmd = `okchaincli tx send ${from} ${to} ${am_sy} --fees=0.002tokt -y`;
+    return this.genPromise(cmd);
+  }
+  async multiTransfer(from, to, coins = []) {
+    const strArr = [];
+    for (const item of coins) {
+      strArr.push(item.amount + '' + item.symbol);
+    }
+    const am_sy = strArr.join(',');
+    const cmd = `okchaincli tx token multi-send --from ${from} --transfers '[{"to":"${to}","amount":"${am_sy}"}]' --fees=0.002tokt -y`;
     return this.genPromise(cmd);
   }
   async createAccount(name) {
@@ -55,6 +70,21 @@ class OkexService extends Service {
   async queryAccount(address) {
     const cmd = `okchaincli query account ${address}`;
     return this.genPromise(cmd);
+  }
+  async queryAccountBalance(address, symbol) {
+    const url = `https://www.okex.me/okchain/v1/accounts/${address}?symbol=${symbol}`;
+    console.log(url);
+    const result = await this.app.curl(url, {
+      method: 'GET',
+      dataType: 'json',
+    });
+    if (result.status === 200 && result.data.code === 0) {
+      const currencies = result.data.data.currencies;
+      if (currencies && currencies.length > 0) {
+        return parseFloat(currencies[0].available);
+      }
+    }
+    return 0;
   }
 }
 

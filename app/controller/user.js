@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const moment = require('moment');
 const md5 = require('crypto-js/md5');
 
-const createLoginRule = {
+/* const createLoginRule = {
   email: {
     type: 'email',
     required: true,
@@ -25,53 +25,41 @@ const createRegisterRule = {
     min: 6,
     max: 6,
   },
-};
+}; */
 
 class UserController extends Controller {
   async register() {
     const { ctx } = this;
-    const { email, password, code } = ctx.request.body;
-    ctx.validate(createRegisterRule, ctx.request.body);
-    const verifyCode = await ctx.service.mail.verify(email, code);
-    if (!verifyCode) {
-      ctx.body = ctx.msg.codeError;
-      return;
-    }
-    const user = {
-      email,
+    const { username, password } = ctx.request.body;
+    const ret = await ctx.service.user.create({
+      username,
       password,
-    };
-    const ret = await ctx.service.user.create(user);
+    });
     if (ret.code === 0) {
-      await this.jwtSign({
-        id: ret.data.id,
-        email,
-      }, { email });
+      await this.jwtSign(ret.data);
     } else {
       ctx.body = ret;
     }
   }
   async login() {
     const { ctx } = this;
-    const { email, password } = ctx.request.body;
-    ctx.validate(createLoginRule, ctx.request.body);
+    const { username, password } = ctx.request.body;
 
-    const userRow = await ctx.service.user.find(email);
+    const userRow = await ctx.service.user.find(username);
     if (userRow === null) {
       ctx.body = ctx.msg.userNotExist;
     } else if (userRow.password !== ctx.helper.md5(password)) {
       ctx.body = ctx.msg.psdError;
     } else {
       const user = {
-        id: userRow.id,
-        email,
+        username,
+        address: userRow.address,
       };
-      const { nickname, avatar, introduction } = userRow;
-      await this.jwtSign(user, { email, nickname, avatar, introduction });
+      await this.jwtSign(user);
     }
   }
-  async jwtSign(user, { email = null, nickname = null, avatar = null, introduction = null }) {
-    this.logger.error('in Controller::user jwt sign %j', user);
+  async jwtSign(user) {
+    this.logger.info('Controller::user jwt sign %j', user);
     const { ctx, config } = this;
     const token = jwt.sign(user, config.login.secretKey, {
       expiresIn: config.login.expires,
@@ -79,57 +67,35 @@ class UserController extends Controller {
     const ret = ctx.msg.success;
     ret.data = {
       access_token: token,
-      expires_in: Math.floor(Date.now() / 1000) + this.config.login.expires,
-      nickname,
-      avatar,
-      email,
-      introduction,
+      expires_in: Math.floor(Date.now() / 1000) + config.login.expires,
+      ...user,
     };
     ctx.body = ret;
   }
   async userInfo() {
     const { ctx } = this;
-    const email = ctx.user.email;
-    const userRow = await ctx.service.user.find(email);
+    const username = ctx.user.username;
+    const userRow = await ctx.service.user.find(username);
     if (userRow === null) {
       ctx.body = ctx.msg.userNotExist;
     } else {
-      const { nickname, avatar, introduction } = userRow;
+      const { nickname, avatar, address } = userRow;
       ctx.body = {
         ...ctx.msg.success,
         data: {
+          username,
           nickname,
           avatar,
-          email,
-          introduction,
+          address,
         },
       };
     }
   }
   async update() {
     const { ctx } = this;
-    const email = ctx.user.email;
-    const { nickname, introduction, avatar } = ctx.request.body;
-    // 判断nickname入参
-    if (nickname) {
-      ctx.validate({
-        nickname: {
-          type: 'string',
-          min: 2,
-          max: 16,
-        },
-      }, ctx.request.body);
-    }
-    // 判断introduction入参
-    if (introduction) {
-      ctx.validate({
-        introduction: {
-          type: 'string',
-          max: 50,
-        },
-      }, ctx.request.body);
-    }
-    const userRow = await ctx.service.user.update({ nickname, introduction, avatar }, email);
+    const username = ctx.user.username;
+    const { nickname, avatar } = ctx.request.body;
+    const userRow = await ctx.service.user.update({ nickname, avatar }, username);
     ctx.body = {
       ...ctx.msg.success,
       data: userRow,
@@ -141,16 +107,15 @@ class UserController extends Controller {
     const file = ctx.request.files[0];
     const filetype = file.filename.split('.');
 
-    // 文件上OSS的路径
+    // file in oss path
     const filename = '/avatar/'
       + moment().format('YYYY/MM/DD/')
       + md5(file.filepath).toString()
       + '.' + filetype[filetype.length - 1];
 
-    // // 文件在本地的缓存路径
     // const filelocation = 'uploads/' + path.basename(file.filename);
 
-    // filepath需要再改
+    // filepath need to change
     const uploadStatus = await this.service.user.uploadImage(filename, file.filepath);
 
     if (uploadStatus !== 0) {

@@ -5,23 +5,15 @@ module.exports = app => {
 
 	const Model = app.model.define('user', {
 		id: {
-			type: DataTypes.INTEGER(10).UNSIGNED,
+			type: DataTypes.INTEGER.UNSIGNED,
 			autoIncrement: true,
 			allowNull: false,
 			primaryKey: true
 		},
 		username: {
 			type: DataTypes.STRING(100),
-			allowNull: true
-		},
-		email: {
-			type: DataTypes.STRING(255),
-			allowNull: true
-		},
-		email_status: {
-			type: DataTypes.INTEGER(1),
-			allowNull: true,
-			defaultValue: '0'
+			allowNull: false,
+			unique: true
 		},
 		nickname: {
 			type: DataTypes.STRING(100),
@@ -32,52 +24,45 @@ module.exports = app => {
 			allowNull: true,
 			defaultValue: ''
 		},
-		create_time: {
-			type: DataTypes.TIME,
-			allowNull: true
+		password: {
+			type: DataTypes.STRING(255),
+			allowNull: false
 		},
-		introduction: {
+		address: {
 			type: DataTypes.STRING(400),
 			allowNull: true
 		},
-		platform: {
+		pubkey: {
+			type: DataTypes.STRING(400),
+			allowNull: true
+		},
+		mnemonic: {
+			type: DataTypes.STRING(400),
+			allowNull: true
+		},
+		email: {
 			type: DataTypes.STRING(255),
 			allowNull: true
 		},
-		reg_ip: {
-			type: DataTypes.STRING(50),
+		phone: {
+			type: DataTypes.STRING(255),
+			allowNull: true
+		},
+		create_time: {
+			type: DataTypes.TIME,
 			allowNull: true
 		},
 		last_login_time: {
 			type: DataTypes.DATE,
 			allowNull: true
 		},
-		password: {
-			type: DataTypes.STRING(255),
-			allowNull: false
+		reg_ip: {
+			type: DataTypes.STRING(50),
+			allowNull: true
 		},
 		last_login_ip: {
 			type: DataTypes.STRING(50),
 			allowNull: true
-		},
-		mobile: {
-			type: DataTypes.STRING(100),
-			allowNull: true
-		},
-		mobile_status: {
-			type: DataTypes.INTEGER(1),
-			allowNull: true,
-			defaultValue: '0'
-		},
-		level: {
-			type: DataTypes.INTEGER(11),
-			allowNull: false,
-			defaultValue: '0'
-		},
-		status: {
-			type: DataTypes.INTEGER(10),
-			allowNull: false,
-			defaultValue: '0'
 		}
 	}, {
 		tableName: 'user',

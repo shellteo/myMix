@@ -11,7 +11,7 @@ module.exports = {
     const zh = {
       lang: 'zh',
       success: { code: 0, message: 'success' },
-      mailHadUsed: { code: 2000001, message: '邮箱已被使用' },
+      nameHadUsed: { code: 2000001, message: '用户名已被使用' },
       psdError: { code: 2000002, message: '密码错误' },
       codeError: { code: 2000002, message: '验证码错误' },
       userExists: { code: 2000002, message: '用户已存在' },
@@ -25,6 +25,8 @@ module.exports = {
 
       loginFailed: { code: 3000001, message: '登录失败' },
       verifyFailed: { code: 4000001, message: '校验失败' },
+      tokenNotExist: { code: 5000001, messaeg: 'token does not exist' },
+      exchangeExist: { code: 5000002, messaeg: 'exchange already exist' },
     };
     let message;
 

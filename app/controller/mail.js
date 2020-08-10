@@ -10,7 +10,7 @@ class MailController extends Controller {
     // 判断邮箱是否注册
     const userRow = await ctx.service.user.find(mail);
     if (userRow !== null) {
-      ctx.body = ctx.msg.mailHadUsed;
+      ctx.body = ctx.msg.nameHadUsed;
     } else {
       ctx.body = await ctx.service.mail.send(mail);
     }
