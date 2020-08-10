@@ -45,7 +45,7 @@ class ExchangeService extends Service {
   async getExchange(symbol) {
     return this.ctx.model.Exchange.find({ where: { token2_symbol: symbol } });
   }
-  async getYourMintToken(cny_amount, symbol) {
+  async getMintLiquidity(cny_amount, symbol) {
     cny_amount = parseFloat(cny_amount);
     const exchange = await this.getExchange(symbol);
     if (exchange === null) return -1;
@@ -77,6 +77,23 @@ class ExchangeService extends Service {
       token2_amount: token_amount,
     };
   }
+  async getPoolCnyToTokenPrice(symbol, amount) {
+    amount = parseFloat(amount);
+    if (amount <= 0) {
+      return -1;
+    }
+    const exchange = await this.getExchange(symbol);
+    if (exchange === null) return -1;
+    const address = exchange.holder_address;
+    const token_reserve = await this.service.okex.queryAccountBalance(address, symbol);
+    const cny_reserve = await this.service.okex.queryAccountBalance(address, TOKT);
+    if (cny_reserve <= 0) {
+      return -1;
+    }
+    // 非首次add，按照当前的价格计算出token数量
+    const token_amount = amount * token_reserve / cny_reserve + 0.00000001;
+    return token_amount;
+  }
   // 计算使用token兑换cny的数量，以输入的token数量为准
   async getTokenToCnyInputPrice(symbol, tokens_sold) {
     tokens_sold = parseFloat(tokens_sold);
@@ -86,9 +103,11 @@ class ExchangeService extends Service {
     const exchange = await this.getExchange(symbol);
     if (exchange === null) return -1;
     const address = exchange.holder_address;
+    console.log(address);
     const token_reserve = await this.service.okex.queryAccountBalance(address, symbol);
     const cny_reserve = await this.service.okex.queryAccountBalance(address, TOKT);
 
+    console.log(tokens_sold, token_reserve, cny_reserve);
     return this.getInputPrice(tokens_sold, token_reserve, cny_reserve);
   }
   // 计算使用cny兑换token的数量，以输入的cny数量为准
@@ -102,7 +121,6 @@ class ExchangeService extends Service {
     const address = exchange.holder_address;
     const token_reserve = await this.service.okex.queryAccountBalance(address, symbol);
     const cny_reserve = await this.service.okex.queryAccountBalance(address, TOKT);
-
     return this.getInputPrice(cny_sold, cny_reserve, token_reserve);
   }
   async addLiquidity(token1_symbol, token1_amount, token2_symbol, token2_amount, min_liquidity, max_tokens) {
@@ -497,6 +515,16 @@ class ExchangeService extends Service {
     const numerator = input_reserve * output_amount * 1000;
     const denominator = (output_reserve - output_amount) * 997;
     return parseFloat((numerator / denominator + 0.00000001).toFixed(8));
+  }
+  async list(offset, limit) {
+    const { ctx } = this;
+    const result = await ctx.model.Exchange.findAndCountAll({
+      attributes: {
+        exclude: [ 'id', 'holder_username' ],
+      },
+      offset, limit,
+    });
+    return result;
   }
 }
 

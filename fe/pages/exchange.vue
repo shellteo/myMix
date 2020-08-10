@@ -1,6 +1,6 @@
 <template>
   <div id="site-wrapper" class="main exchange">
-    <Header />
+    <!-- <Header /> -->
     <div class="outer-container">
       <div class="p-w">
         <el-tabs

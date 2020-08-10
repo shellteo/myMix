@@ -137,6 +137,49 @@ class UserController extends Controller {
       data: balance,
     };
   }
+  async exchange() {
+    const { ctx } = this;
+    const { symbol } = ctx.query;
+
+    const exchange = await this.service.exchange.getExchange(symbol);
+    if (exchange === null) {
+      ctx.body = ctx.msg.exchangeNotExist;
+      return;
+    }
+    const total_liquidity = parseFloat(exchange.total_supply);
+
+    const username = ctx.user.username;
+    const balance = await this.service.exchangeBalance.find(username, symbol);
+    const user_liquidity = parseFloat(balance.liquidity_balance);
+    if (balance === null || user_liquidity <= 0 || total_liquidity <= 0) {
+      ctx.body = {
+        ...ctx.msg.success,
+        data: {
+          okt_amount: 0,
+          token_amount: 0,
+          liquidity: 0,
+        },
+      };
+      return;
+    }
+
+    const address = exchange.holder_address;
+    const token_reserve = await this.service.okex.queryAccountBalance(address, symbol);
+    const okt_reserve = await this.service.okex.queryAccountBalance(address, 'tokt');
+
+    // 根据用户remove的amount数量计算出cny数量
+    const okt_amount = parseFloat(okt_reserve * user_liquidity / total_liquidity);
+    // 计算出token数量
+    const token_amount = parseFloat(token_reserve * user_liquidity / total_liquidity);
+    ctx.body = {
+      ...ctx.msg.success,
+      data: {
+        okt_amount,
+        token_amount,
+        user_liquidity,
+      },
+    };
+  }
 }
 
 module.exports = UserController;

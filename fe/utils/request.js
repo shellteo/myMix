@@ -24,7 +24,7 @@ const _axios = axios.create({
 // let loadingInstance = null;
 _axios.interceptors.request.use(
   (config) => {
-    if (getCookie('ACCESS_TOKEN')) config.headers['authorization'] = getCookie('ACCESS_TOKEN');
+    if (getCookie('ACCESS_TOKEN')) config.headers['authorization'] = 'Bearer ' + getCookie('ACCESS_TOKEN');
     return config;
   },
   (error) => {

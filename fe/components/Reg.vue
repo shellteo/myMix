@@ -1,6 +1,7 @@
 <template>
   <div class="login-card">
     <el-form
+      v-if="step === 1"
       ref="loginForm"
       :model="loginForm"
       :rules="loginRules"
@@ -35,10 +36,17 @@
         </el-button>
       </el-form-item>
     </el-form>
-    <div class="mnemonic">
-      <span v-for="(item, key) of mnemonicArr" :key="key" class="mnemonic-item">
-        {{ item }}
-      </span>
+    <div v-if="step === 2">
+      <p>please remember your mnemonic</p>
+      <div class="mnemonic">
+        <span v-for="(item, key) of mnemonicArr" :key="key" class="mnemonic-item">
+          {{ item }}
+        </span>
+      </div>
+      <br>
+      <el-button type="primary" native-type="submit" @click="submitLoginForm">
+        Mnemonic Already Written Down
+      </el-button>
     </div>
   </div>
 </template>
@@ -74,7 +82,8 @@ export default {
           }
         ]
       },
-      mnemonic: 'noodle close unhappy duck uncle assault lizard give retreat talent control hand'
+      mnemonic: 'aaa bbb ccc ddd eee gggg dsd sdsds sddsds zcxxc cxzc xczzx',
+      step: 1
     }
   },
   computed: {
@@ -83,7 +92,9 @@ export default {
     }
   },
   methods: {
-    submitLoginForm() {}
+    submitLoginForm() {
+      this.step = 2
+    }
   }
 }
 </script>

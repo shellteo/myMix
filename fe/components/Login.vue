@@ -22,7 +22,7 @@
         />
       </el-form-item>
       <el-form-item class="ss-btn">
-        <el-button type="primary" native-type="submit" @click="submitLoginForm">
+        <el-button type="primary" native-type="submit" @click="submitLoginForm" class="login-btn">
           Login
         </el-button>
       </el-form-item>
@@ -31,13 +31,13 @@
 </template>
 
 <script>
+import { setCookie } from '@/utils'
 export default {
   data() {
     return {
       loginForm: {
         username: '',
-        password: '',
-        rePassword: ''
+        password: ''
       },
       loginRules: {
         username: [
@@ -65,7 +65,16 @@ export default {
   },
   computed: {},
   methods: {
-    submitLoginForm() {}
+    async submitLoginForm() {
+      const res = await this.$request.post('/api/user/login', {
+        username: this.loginForm.username,
+        password: this.loginForm.password
+      })
+      if (res.code === 0) {
+        const accessToken = res.data.access_token
+        setCookie('ACCESS_TOKEN', accessToken, 7)
+      }
+    }
   }
 }
 </script>
@@ -74,5 +83,8 @@ export default {
 .login-card {
   max-width: 400px;
   margin: 0 auto;
+}
+.login-btn {
+  width: 80%;
 }
 </style>

@@ -9,7 +9,7 @@
     custom-class="br10 black-theme-dialog token-list"
   >
     <div class="container">
-      <div class="csvLqB">
+      <!-- <div class="csvLqB">
         <div class="search-box">
           <i class="el-icon-search" />
         </div>
@@ -20,14 +20,13 @@
           class="dHtVAe"
           @keyup.enter="searchToken"
         >
-      </div>
+      </div> -->
       <div
         v-loading="loading"
         class="cotdDw br10"
         element-loading-background="rgba(0, 0, 0, 0.3)"
       >
         <el-table
-          v-if="tableConfig.mode === 'all'"
           :data="tokenList"
           height="50vh"
           style="width: 100%"
@@ -35,103 +34,23 @@
         >
           <el-table-column
             width="250px"
-            label="Fan票"
-            class="test123"
-          >
-            <template slot-scope="scope">
-              <div class="sc-fYxtnH cjqFX">
-                <div class="favMUS">
-                </div>
-                <div class="sc-tilXH egNEUM">
-                  <span id="symbol">{{ scope.row.symbol }}</span>
-                  <div class="sc-hEsumM iHXZgD">
-                    {{ scope.row.name }}
-                  </div>
-                </div>
-              </div>
-            </template>
-          </el-table-column>
+            label="Symbol"
+            prop="token2_symbol"
+          />
           <el-table-column
-            label="流通量"
-          >
-            <template slot-scope="scope">
-              <span>
-                {{ scope.row.amount || '暂无流通量' }}
-              </span>
-            </template>
-          </el-table-column>
+            label="Liquidity"
+            prop="total_supply"
+          />
           <el-table-column
-            label="Founder"
+            label="View Detail"
           >
             <template slot-scope="scope">
-              <span style="white-space: nowrap;">
-                {{ scope.row.nickname || scope.row.email }}
-              </span>
-            </template>
-          </el-table-column>
-          <el-table-column
-            label=""
-          >
-            <template slot-scope="scope">
-              <n-link
-                v-if="scope.row.id !== 0"
-                :to="{name: 'token-id', params: {id: scope.row.id}}"
-                target="_blank"
-                class="gray-btn"
-              >
-                <el-button circle>
-                  <svg-icon
-                    icon-class="share-link"
-                    style="color: #B2B2B2;"
-                  />
-                </el-button>
-              </n-link>
+              <a :href="'https://www.okex.com/okchain/v1/token/' + scope.row.token2_symbol" target="_blank">
+                {{ scope.row.token2_symbol }}
+              </a>
             </template>
           </el-table-column>
         </el-table>
-
-        <el-table
-          v-if="tableConfig.mode === 'simplify'"
-          :data="tokenList"
-          height="50vh"
-          style="width: 100%"
-          @row-click="selectToken"
-        >
-          <el-table-column
-            label="Fan票"
-            class="test123"
-          >
-            <template slot-scope="scope">
-              <div class="sc-fYxtnH cjqFX">
-                <div class="favMUS">
-                </div>
-                <div class="sc-tilXH egNEUM">
-                  <span id="symbol">{{ scope.row.symbol }}</span>
-                  <div class="sc-hEsumM iHXZgD">
-                    {{ scope.row.name }}
-                  </div>
-                </div>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            label="流通量"
-          >
-            <template slot-scope="scope">
-              <span>
-                {{ scope.row.amount || '暂无流通量' }}
-              </span>
-            </template>
-          </el-table-column>
-        </el-table>
-        <div
-          v-if="showLoadMore"
-          class="loadmore"
-        >
-          <span @click="loadMore">
-            加载更多<i class="el-icon-arrow-down" />
-          </span>
-        </div>
       </div>
     </div>
   </el-dialog>
@@ -230,37 +149,14 @@ export default {
       this.showModal = false
       this.$emit('selectToken', token)
     },
-    getAllToken() {
+    async getAllToken() {
       const { page, pagesize, search } = this
       this.loading = true
-      /* this.$API.allToken({ page, pagesize, search }).then(res => {
-        this.loading = false
-        let listFromDecimal = this.listFromDecimal(res.data.list || [])
-        if (search === '') {
-          if (page === 1) {
-            this.count = res.data.count
-            let list = []
-            if (this.addon) {
-              list = [
-                CNY,
-                ...listFromDecimal
-              ]
-            } else {
-              list = listFromDecimal
-            }
-            this.tokenList = list
-          } else {
-            this.tokenList.push(...listFromDecimal)
-          }
-        } else {
-          if (page === 1) {
-            this.count = res.data.count
-            this.tokenList = listFromDecimal
-          } else {
-            this.tokenList.push(...listFromDecimal)
-          }
-        }
-      }) */
+      const res = await this.$request.get('/api/exchange')
+      if (res.code === 0) {
+        this.tokenList = res.data.rows
+      }
+      this.loading = false
     },
     listFromDecimal(list) {
       /* list.forEach((item) => {
@@ -268,7 +164,7 @@ export default {
       })
       return list */
     },
-        // 初始化list
+    // 初始化list
     initTokenList() {
       try {
         const clientWidth = document.body.clientWidth || document.documentElement.clientWidth
@@ -319,6 +215,10 @@ export default {
 <style scoped lang="scss">
 ::placeholder {
   color: #b2b2b2;
+}
+a {
+  text-decoration: underline;
+  color: blue;
 }
 .container {
   .favMUS {
