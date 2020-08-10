@@ -30,6 +30,7 @@ class UserService extends Service {
       data: {
         username,
         address,
+        mnemonic,
       },
     };
   }
