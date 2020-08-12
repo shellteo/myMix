@@ -34,7 +34,7 @@
         </div>
       </div>
     </div>
-    <div class="hYLPFg">
+    <div class="hYLPFg hidden-border">
       <div class="exKIZr" />
       <div class="haryqg">
         <i
@@ -187,7 +187,7 @@ export default {
       return this.base === 'input' ? 'buy_token_input' : 'buy_token_output'
     },
     btnDisabled() {
-      return false
+      return true
     },
     limitValue() {
       return '-'

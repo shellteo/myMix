@@ -72,7 +72,7 @@
         </div>
       </div>
     </div>
-    <div class="hYLPFg">
+    <div class="hYLPFg hidden-border">
       <div class="exKIZr" />
       <div class="haryqg">
         <i

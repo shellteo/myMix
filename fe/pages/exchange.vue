@@ -62,10 +62,9 @@ export default {
 </script>
 <style lang="scss">
 $bg-color: rgb(33, 36, 41);;
-$purpleDark: red;
+$purpleDark: #d93025;
 $borderRadius6: 6px;
 #site-wrapper {
-  padding:1.5vw;
   width:100%;
   max-width:1750px;
   margin:0 auto;
@@ -111,8 +110,8 @@ $borderRadius6: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 50px 10px 10px;
-    margin-bottom: 20px;
+    padding: 30px 10px 10px;
+    margin-bottom: 0px;
   }
   .el-tabs__item {
     display: flex;
@@ -157,13 +156,11 @@ $bg-color: #F7F7F7;
 .main {
   background-color: rgb(44, 47, 54);
 }
-$width: 650px;
+$width: 450px;
 .outer-container {
-  max-width: 800px;
-  padding: 20px 10px 0;
-  margin: auto;
+  /* margin: auto;
   position: relative;
-  box-sizing: border-box;
+  box-sizing: border-box; */
 }
 .p-w  {
   max-width: $width;

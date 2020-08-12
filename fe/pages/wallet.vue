@@ -3,14 +3,14 @@
     <!-- <g-header /> -->
     <div class="sign">
       <div class="logo">
-        <img src="https://mixswap.oss-cn-hangzhou.aliyuncs.com/mixswap_logo.jpg" alt="logo">
+        <img src="https://mixswap.oss-cn-hangzhou.aliyuncs.com/mixswap_logo_white.png" alt="logo">
       </div>
       <div class="auth-card">
         <h4 class="title">
           <div class="normal-title">
             <a :class="type === 'sign_up' ? 'active': ''" href="#sign_up">Sign Up</a>
             <b> / </b>
-            <a :class="type === 'sign_in' ? 'active': ''" href="#sign_in">Login</a>
+            <a :class="type === 'sign_in' ? 'active': ''" href="#sign_in">Sign In</a>
           </div>
         </h4>
         <Reg v-if="type === 'sign_up'" />
@@ -59,19 +59,20 @@ export default {
   background-color: #fff;
 }
 .sign {
-  height: 100%;
-  min-height: 750px;
   text-align: center;
   font-size: 14px;
-  background-color: #fff;
+  background-color: rgb(44, 47, 54);
   .logo {
     width: 200px;
     position: absolute;
     top: 56px;
     margin-left: 50px;
+    img {
+      width: 200px;
+    }
   }
   .title {
-    margin: 0 auto 50px;
+    margin: 0 auto 20px;
     padding: 10px;
     font-weight: 400;
     color: #969696;
@@ -80,10 +81,11 @@ export default {
       cursor: pointer;
       padding: 10px;
       color: #969696;
+      text-decoration: none;
     }
     .active {
-      color: red;
-      border-bottom: 2px solid red;
+      color: #d93025;
+      border-bottom: 2px solid #d93025;
     }
     b {
       padding: 10px;
@@ -91,11 +93,11 @@ export default {
   }
 }
 .auth-card {
-  width: 400px;
-  margin: 160px auto 0;
+  width: 300px;
+  margin: 10vh auto 0;
   padding: 50px 50px 30px;
   background-color: #fff;
-  border-radius: 4px;
+  border-radius: 20px;
   box-shadow: 0 0 8px rgba(0,0,0,.1);
   vertical-align: middle;
   display: inline-block;

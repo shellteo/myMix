@@ -73,15 +73,15 @@ export default {
 </script>
 
 <style scoped lang="scss">
-$purpleDark: red;
+$purpleDark: #ccc;
 .container {
-  // background-color: #ffffff;
+  background-color: rgb(33, 36, 41);
   width: 100%;
   height: 100%;
   box-sizing: border-box;
   padding: 2rem 2rem;
   .cwefbr.MODE {
-    // background-color: #ffffff;
+    background-color: rgb(44, 47, 54);
     font-weight: 500;
     color: $purpleDark;
     border-radius: 3rem;
@@ -98,22 +98,30 @@ $purpleDark: red;
     flex-flow: row nowrap;
     padding: 1rem;
     text-decoration: none;
+    font-weight: 500;
+    color: $purpleDark;
+    border-radius: 3rem;
+    border-width: 1px;
+    border-style: solid;
+    border-color: $purpleDark;
+    border-image: initial;
   }
   button {
     cursor: pointer;
     user-select: none;
     font-size: 1rem;
-    color: rgb(255, 255, 255);
-    // background-color: #ffffff;
+    color: #ccc;
+    background-color: rgb(33, 36, 41);
     box-sizing: border-box;
     width: 100%;
     padding: 1rem 2rem;
     border-radius: 3rem;
+    border-color: rgb(44, 47, 54)!important;
     border-width: initial;
     border-style: none;
-    border-color: initial;
     border-image: initial;
     outline: none;
+    margin-bottom: 20px;
   }
 }
 

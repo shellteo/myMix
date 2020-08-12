@@ -5,8 +5,7 @@
     :lock-scroll="false"
     :before-close="handleClose"
     title="Select a token"
-    width="600px"
-    custom-class="br10 black-theme-dialog token-list"
+    custom-class="black-theme-dialog token-list"
   >
     <div class="container">
       <!-- <div class="csvLqB">
@@ -30,13 +29,19 @@
           :data="tokenList"
           height="50vh"
           style="width: 100%"
+          cell-class-name="cell-class"
+          header-cell-class-name="header-cell-class"
           @row-click="selectToken"
         >
           <el-table-column
-            width="250px"
             label="Symbol"
-            prop="token2_symbol"
-          />
+          >
+            <template slot-scope="scope">
+              <span>
+                🤑  {{ scope.row.token2_symbol }}
+              </span>
+            </template>
+          </el-table-column>
           <el-table-column
             label="Liquidity"
             prop="total_supply"
@@ -198,17 +203,55 @@ export default {
   }
 }
 .black-theme-dialog {
-  // background-color: #ffffff;
+  max-width: 420px;
+  max-height: 70vh;
+  min-height: 70vh;
+  border-radius: 20px;
+  background-color: rgb(33, 36, 41);
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 4px 8px 0px;
   .el-dialog__body {
     padding: 10px 0 0 0;
-    color: #000000;
+    color: #ffffff;
     font-size: 14px;
     word-break: break-all;
+    background-color: rgb(33, 36, 41);
   }
   .el-dialog__title {
     line-height: 24px;
     font-size: 18px;
-    color: #000000;
+    color: #ffffff;
+  }
+  .el-table {
+    background-color: rgb(33, 36, 41);
+    &::before {
+      background-color: rgb(44, 47, 54);
+    }
+    .el-table__row:hover {
+      background-color: rgb(44, 47, 54);
+      cursor: pointer;
+      .cell-class {
+        background-color: rgb(44, 47, 54);
+        border-bottom: 1px solid rgb(44, 47, 54)!important;
+        color: #ccc;
+      }
+    }
+  }
+}
+.header-cell-class {
+  background-color: rgb(33, 36, 41)!important;
+  border-bottom: 1px solid rgb(44, 47, 54)!important;
+  color: #ffffff;
+  font-size: 16px;
+}
+.cell-class {
+  background-color: rgb(33, 36, 41);
+  border-bottom: 1px solid rgb(44, 47, 54)!important;
+  color: #ccc;
+  font-size: 16px;
+}
+@media (max-width: 960px) {
+  .black-theme-dialog {
+    width: 90vw;
   }
 }
 </style>
@@ -218,7 +261,7 @@ export default {
 }
 a {
   text-decoration: underline;
-  color: blue;
+  color: rgb(27, 149, 224);;
 }
 .container {
   .favMUS {
@@ -251,7 +294,7 @@ a {
     user-select: none;
     flex-flow: row nowrap;
     padding: 1rem;
-    color: #000000;
+    color: #ffffff;
   }
 
   .cjqFX {
@@ -296,7 +339,7 @@ a {
   }
 
   .dHtVAe {
-    color: #000000;
+    color: #ffffff;
     font-size: 1rem;
     width: 0px;
     min-height: 2.5rem;

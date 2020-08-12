@@ -7,23 +7,23 @@
       class="ss-form"
       @submit.native.prevent
     >
-      <el-form-item prop="username" label="User Name">
+      <el-form-item prop="username" label="Username">
         <el-input
           v-model="loginForm.username"
-          placeholder="please input user name"
+          placeholder="please enter your username"
         />
       </el-form-item>
-      <el-form-item prop="password" label="User Password">
+      <el-form-item prop="password" label="Password">
         <el-input
           v-model="loginForm.password"
-          placeholder="please input your password"
+          placeholder="please enter your password"
           type="password"
           show-password
         />
       </el-form-item>
       <el-form-item class="ss-btn">
-        <el-button type="primary" native-type="submit" @click="submitLoginForm" class="login-btn">
-          Login
+        <el-button class="mix-btn" type="primary" native-type="submit" @click="submitLoginForm">
+          Sign In
         </el-button>
       </el-form-item>
     </el-form>
@@ -34,6 +34,20 @@
 import { setCookie } from '@/utils'
 export default {
   data() {
+    const validatePass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('Please enter password'))
+      } else {
+        callback()
+      }
+    }
+    const validateUsername = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('Please enter username'))
+      } else {
+        callback()
+      }
+    }
     return {
       loginForm: {
         username: '',
@@ -41,39 +55,32 @@ export default {
       },
       loginRules: {
         username: [
-          {
-            required: true,
-            message: '1',
-            trigger: ''
-          }
+          { validator: validateUsername, trigger: 'blur' }
         ],
         password: [
-          {
-            required: true,
-            message: '1',
-            trigger: ''
-          },
-          {
-            min: 8,
-            max: 16,
-            message: '1',
-            trigger: ''
-          }
+          { validator: validatePass, trigger: 'blur' }
         ]
       }
     }
   },
   computed: {},
   methods: {
-    async submitLoginForm() {
-      const res = await this.$request.post('/api/user/login', {
-        username: this.loginForm.username,
-        password: this.loginForm.password
+    submitLoginForm() {
+      this.$refs.loginForm.validate(async (valid) => {
+        if (valid) {
+          const { username, password } = this.loginForm
+          const res = await this.$request.post('/api/user/login', {
+            username,
+            password
+          })
+          if (res.code === 0) {
+            const accessToken = res.data.access_token
+            setCookie('ACCESS_TOKEN', accessToken, 7)
+          }
+        } else {
+          return false
+        }
       })
-      if (res.code === 0) {
-        const accessToken = res.data.access_token
-        setCookie('ACCESS_TOKEN', accessToken, 7)
-      }
     }
   }
 }
@@ -84,7 +91,11 @@ export default {
   max-width: 400px;
   margin: 0 auto;
 }
-.login-btn {
-  width: 80%;
+</style>
+<style lang="scss">
+.mix-btn {
+  width: 100%;
+  border-radius: 50px;
+  margin-top: 20px;
 }
 </style>
