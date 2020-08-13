@@ -1,4 +1,5 @@
-// 初始化
+// import { getCookie } from '@/utils/index'
+
 export const state = () => {
   return {
     locales: ['zh', 'en'],
@@ -10,7 +11,15 @@ export const state = () => {
   }
 }
 
-export const getters = {}
+export const getters = {
+  isLogined: () => {
+    /* if (getCookie('ACCESS_TOKEN')) {
+      return true
+    } else {
+      return false
+    } */
+  }
+}
 
 export const mutations = {
   SET_LOGIN_MODAL_SHOW(state, show) {

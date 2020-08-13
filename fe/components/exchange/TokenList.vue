@@ -3,23 +3,10 @@
     :close-on-click-modal="false"
     :visible.sync="showModal"
     :lock-scroll="false"
-    :before-close="handleClose"
     title="Select a token"
     custom-class="black-theme-dialog token-list"
   >
     <div class="container">
-      <!-- <div class="csvLqB">
-        <div class="search-box">
-          <i class="el-icon-search" />
-        </div>
-        <input
-          v-model="search"
-          type="text"
-          placeholder="搜索Fan票"
-          class="dHtVAe"
-          @keyup.enter="searchToken"
-        >
-      </div> -->
       <div
         v-loading="loading"
         class="cotdDw br10"
@@ -74,21 +61,9 @@ export default {
     value: {
       type: Boolean,
       default: false
-    },
-    addon: {
-      type: Boolean,
-      default: true
     }
   },
   computed: {
-    showLoadMore() {
-      const { page, pagesize, count } = this
-      if (page * pagesize > count) {
-        return false
-      } else {
-        return true
-      }
-    }
   },
   watch: {
     showModal(val) {
@@ -96,61 +71,21 @@ export default {
     },
     value(val) {
       this.showModal = val
-    },
-    search(v) {
-      if (v === '') {
-        this.page = 1
-        this.getAllToken()
-      }
     }
   },
   data() {
     return {
-      search: '',
       showModal: false,
       tokenList: [],
-      page: 1,
-      pagesize: 100,
-      count: 0,
       loading: false,
-      resizeEvent: null,
-      tableConfig: {
-        mode: '', // simplify all
-      }
-    }
-  },
-  created() {
-    if (process.browser) {
-      this.$nextTick(() => {
-        this.initTokenList()
-        this.resizeEvent = throttle(this.initTokenList, 300)
-        window.addEventListener('resize', this.resizeEvent)
-      })
     }
   },
   mounted() {
     this.getAllToken()
   },
-  destroyed() {
-    window.removeEventListener('resize', this.resizeEvent)
-  },
   methods: {
-    getImg(url) {
-      return this.$ossProcess(url)
-    },
-    handleClose() {
-      this.search = ''
-      this.showModal = false
-    },
-    searchToken() {
-      this.page = 1
-      this.getAllToken()
-    },
-    loadMore() {
-      this.page = this.page + 1
-      this.getAllToken()
-    },
     selectToken(token) {
+      console.log(token)
       this.showModal = false
       this.$emit('selectToken', token)
     },
@@ -159,34 +94,13 @@ export default {
       this.loading = true
       const res = await this.$request.get('/api/exchange')
       if (res.code === 0) {
-        this.tokenList = res.data.rows
+        this.tokenList = [
+          OKT,
+          ...res.data.rows
+        ]
       }
       this.loading = false
-    },
-    listFromDecimal(list) {
-      /* list.forEach((item) => {
-        item.amount = utils.fromDecimal(item.amount)
-      })
-      return list */
-    },
-    // 初始化list
-    initTokenList() {
-      try {
-        const clientWidth = document.body.clientWidth || document.documentElement.clientWidth
-        // console.log('clientWidth', clientWidth)
-        if (clientWidth <= 600) {
-          this.tableConfig = {
-            mode: 'simplify'
-          }
-        } else {
-          this.tableConfig = {
-            mode: 'all'
-          }
-        }
-      } catch(e) {
-        console.log(e)
-      }
-    },
+    }
   }
 }
 </script>

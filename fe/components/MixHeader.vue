@@ -3,11 +3,11 @@
     <div class="logo">
       <img src="https://mixswap.oss-cn-hangzhou.aliyuncs.com/mixswap_logo_white.png" alt="logo">
     </div>
-    <!-- <div class="user-out">
-      <div class="user-balance">1.23 OKT</div>
-      <button class="user-info" @click="show"><p class="address">0x0530...0346</p>🦁</button>
-    </div> -->
-    <div class="user-out">
+    <div v-if="isLogined" class="user-out">
+      <div class="user-balance">{{ info.balance }} TOKT</div>
+      <button class="user-info" @click="show"><p class="address">{{ info.address }}</p>🦁</button>
+    </div>
+    <div v-else class="user-out2">
       <n-link
         :to="{ path: 'wallet#sign_up' }"
       >
@@ -22,7 +22,8 @@
   </nav>
 </template>
 <script>
-// import Web3Status from './Web3Status'
+// import { mapGetters } from 'vuex'
+import { getCookie } from '@/utils/index'
 import consts from '@/utils/consts'
 export default {
   components: {
@@ -31,19 +32,31 @@ export default {
   data() {
     return {
       page: '',
-      uniswapURL: consts.uniswapURL
+      uniswapURL: consts.uniswapURL,
+      isLogined: false,
+      info: {}
     }
   },
   computed: {
   },
   mounted() {
     this.page = this.$route.name
+    this.isLogined = !!getCookie('ACCESS_TOKEN')
+    if (this.isLogined) {
+      this.getBalance()
+    }
   },
   methods: {
     show() {
       console.log(this.$store.state.userModalShow)
       this.$store.commit('SET_USER_MODAL_SHOW', true)
       console.log(this.$store.state.userModalShow)
+    },
+    async getBalance() {
+      const res = await this.$request.get('/api/user/info')
+      if (res.code === 0) {
+        this.info = res.data
+      }
     }
   }
 }
@@ -72,7 +85,7 @@ export default {
     display: flex;
     flex-direction: row;
     align-items: center;
-    // background-color: rgb(64, 68, 79);
+    background-color: rgb(64, 68, 79);
     white-space: nowrap;
     border-radius: 12px;
     color: #ffffff;
@@ -118,7 +131,7 @@ export default {
         text-overflow: ellipsis;
         white-space: nowrap;
         font-size: 1rem;
-        width: fit-content;
+        width: 100px;
         font-weight: 500;
         flex: 1 1 auto;
         overflow: hidden;
@@ -126,6 +139,19 @@ export default {
       }
     }
   }
+}
+
+.user-out2 {
+  a {
+    text-decoration: none;
+    margin-left: 10px;
+  }
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  white-space: nowrap;
+  border-radius: 12px;
+  color: #ffffff;
 }
 .sign-out {
   text-align: center;

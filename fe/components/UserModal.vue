@@ -69,8 +69,8 @@ export default {
   },
   mounted() {
     this.account()
-    this.exchange()
-    this.balance()
+    // this.exchange()
+    // this.balance()
   },
   methods: {
     copy() {

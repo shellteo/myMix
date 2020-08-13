@@ -1,10 +1,9 @@
 export const OKT = {
-  decimals: 4,
-  id: 0,
-  logo: '/image/2019/10/16/c445946b8dd202476bca63d5317198ea.png',
-  name: '人民币',
-  symbol: 'OKT',
-  isOKT: true
+  create_time: '',
+  holder_address: '',
+  token1_symbol: 'tokt',
+  token2_symbol: 'tokt',
+  total_supply: '-'
 }
 
 export const INPUT = 'inputToken'

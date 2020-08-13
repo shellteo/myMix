@@ -80,6 +80,7 @@ class UserController extends Controller {
       ctx.body = ctx.msg.userNotExist;
     } else {
       const { nickname, avatar, address } = userRow;
+      const balance = await this.service.okex.queryAccountBalance(address, 'tokt');
       ctx.body = {
         ...ctx.msg.success,
         data: {
@@ -87,6 +88,7 @@ class UserController extends Controller {
           nickname,
           avatar,
           address,
+          balance,
         },
       };
     }
