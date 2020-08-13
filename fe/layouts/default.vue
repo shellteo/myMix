@@ -2,6 +2,7 @@
   <div class="container">
     <nuxt />
     <AuthModal v-model="loginModalShow" :type="loginModalType" :title="loginModalTitle" />
+    <UserModal v-model="userModalShow" />
   </div>
 </template>
 
@@ -9,10 +10,12 @@
 import { mapState } from 'vuex'
 
 import AuthModal from '@/components/Auth/index.vue'
+import UserModal from '@/components/UserModal.vue'
 export default {
   name: 'Default',
   components: {
-    AuthModal
+    AuthModal,
+    UserModal
   },
   computed: {
     ...mapState(['loginModalType', 'loginModalTitle']),
@@ -22,6 +25,14 @@ export default {
       },
       set(v) {
         this.$store.commit('SET_LOGIN_MODAL_SHOW', v)
+      }
+    },
+    userModalShow: {
+      get() {
+        return this.$store.state.userModalShow
+      },
+      set(v) {
+        this.$store.commit('SET_USER_MODAL_SHOW', v)
       }
     }
   }

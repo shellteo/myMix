@@ -8,9 +8,9 @@
       <div class="auth-card">
         <h4 class="title">
           <div class="normal-title">
-            <a :class="type === 'sign_up' ? 'active': ''" href="#sign_up">Sign Up</a>
+            <a :class="type === 'sign_up' ? 'active': ''" @click="tabClick('#sign_up')">Sign Up</a>
             <b> / </b>
-            <a :class="type === 'sign_in' ? 'active': ''" href="#sign_in">Sign In</a>
+            <a :class="type === 'sign_in' ? 'active': ''" @click="tabClick('#sign_in')">Sign In</a>
           </div>
         </h4>
         <Reg v-if="type === 'sign_up'" />
@@ -49,7 +49,9 @@ export default {
     }
   },
   methods: {
-    submitLoginForm() {}
+    tabClick(hash) {
+      this.$router.replace({ hash })
+    }
   }
 }
 </script>

@@ -126,6 +126,16 @@ class UserController extends Controller {
     ctx.body = ctx.msg.success;
     ctx.body.data = { url: filename };
   }
+  async account() {
+    const { ctx } = this;
+    const address = ctx.user.address;
+    const account = await this.service.okex.queryAccountFromAPI(address);
+
+    ctx.body = {
+      ...ctx.msg.success,
+      data: account,
+    };
+  }
   async balance() {
     const { ctx } = this;
     const { symbol } = ctx.query;

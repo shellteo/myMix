@@ -1,6 +1,6 @@
 <template>
   <div id="site-wrapper" class="main exchange">
-    <!-- <Header /> -->
+    <Header />
     <div class="outer-container">
       <div class="p-w">
         <el-tabs
@@ -29,12 +29,12 @@
 <script>
 import Swap from '@/components/exchange/Swap'
 import Pool from '@/components/exchange/Pool'
-// import Header from '@/components/MixHeader'
+import Header from '@/components/MixHeader'
 export default {
   components: {
     Swap,
-    Pool
-    // Header
+    Pool,
+    Header
   },
   data() {
     return {

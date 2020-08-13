@@ -42,6 +42,7 @@ module.exports = app => {
   router.get('/api/user/balance', passport, controller.user.balance);
   // user exchange balance
   router.get('/api/user/exchange', passport, controller.user.exchange);
+  router.get('/api/user/account', passport, controller.user.account);
 
   router.get('/test', controller.test.list);
   router.resources('/token', controller.token);

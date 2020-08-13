@@ -5,7 +5,8 @@ export const state = () => {
     locale: 'zh',
     loginModalShow: false,
     loginModalType: 1,
-    loginModalTitle: 'false'
+    loginModalTitle: 'false',
+    userModalShow: false
   }
 }
 
@@ -20,6 +21,9 @@ export const mutations = {
   },
   SET_LOGIN_MODAL_TITLE(state, title) {
     state.loginModalTitle = title
+  },
+  SET_USER_MODAL_SHOW(state, show) {
+    state.userModalShow = show
   }
 }
 

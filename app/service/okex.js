@@ -86,6 +86,17 @@ class OkexService extends Service {
     }
     return 0;
   }
+  async queryAccountFromAPI(address) {
+    const url = `https://www.okex.me/okchain/v1/accounts/${address}`;
+    const result = await this.app.curl(url, {
+      method: 'GET',
+      dataType: 'json',
+    });
+    if (result.status === 200 && result.data.code === 0) {
+      return result.data.data;
+    }
+    return null;
+  }
 }
 
 module.exports = OkexService;

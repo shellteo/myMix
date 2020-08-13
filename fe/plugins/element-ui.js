@@ -10,7 +10,9 @@ import {
   Form,
   FormItem,
   Input,
-  Button
+  Button,
+  Tooltip,
+  Icon
 } from 'element-ui'
 
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
@@ -25,6 +27,8 @@ Vue.use(Dialog)
   .use(Button)
   .use(Form)
   .use(FormItem)
+  .use(Tooltip)
+  .use(Icon)
 Vue.component(CollapseTransition.name, CollapseTransition)
 
 Vue.prototype.$loading = Loading.service
