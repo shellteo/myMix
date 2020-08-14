@@ -394,10 +394,76 @@ export default {
     getOutputAmount(inputTokenId, outputTokenId, inputAmount) {
     },
     onSubmit() {
+      if (this.isDelete) {
+        this.removeLiquidity()
+      } else {
+        this.addLiquidity()
+      }
     },
-    addLiquidity() {
+    async addLiquidity() {
+      const { input, output, outputToken } = this.form
+      if (!input) {
+        this.$message.error('Not a valid input value')
+        return
+      }
+      if (!output) {
+        this.$message.error('Not a valid output value')
+        return
+      }
+      if (!outputToken.token2_symbol) {
+        this.$message.error('Please select a token to continue.')
+        return
+      }
+      this.$store.commit('SET_PAGE_LOADING', true)
+      const res = await this.$request.post('/api/exchange/addLiquidity', {
+        symbol: outputToken.token2_symbol,
+        tokt_amount: input,
+        token_amount: output
+      })
+      this.$store.commit('SET_PAGE_LOADING', false)
+      let msg = ''
+      if (res.code === 0) {
+        msg = '🚀 ➕ add liquidity successful~'
+      } else {
+        msg = '❌ add liquidity failed!'
+      }
+      this.$alert(msg, 'Tips', {
+        showClose: false,
+        callback: (action) => {
+          console.log(action)
+          window.location.reload()
+        }
+      })
     },
-    removeLiquidity() {
+    async removeLiquidity() {
+      const { output, outputToken } = this.form
+      if (!output) {
+        this.$message.error('Not a valid input value')
+        return
+      }
+      if (!outputToken.token2_symbol) {
+        this.$message.error('Please select a token to continue.')
+        return
+      }
+      this.$store.commit('SET_PAGE_LOADING', true)
+      const res = await this.$request.post('/api/exchange/removeLiquidty', {
+        symbol: outputToken.token2_symbol,
+        amount: output
+      })
+      this.$store.commit('SET_PAGE_LOADING', false)
+      let msg = ''
+      if (res.code === 0) {
+        msg = '🚀 ➖ Remove Liquidity successful~'
+      } else {
+        msg = '❌ Remove Liquidity failed!'
+      }
+      this.$alert(msg, 'Tips', {
+        showClose: false,
+        callback: (action) => {
+          console.log(action)
+          window.location.reload()
+        }
+      })
     },
     // 根据okt获取token数量
     async getTokenAmountByOkt(symbol, oktAmount) {

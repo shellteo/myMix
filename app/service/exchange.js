@@ -57,9 +57,9 @@ class ExchangeService extends Service {
     if (total_liquidity <= 0) {
       mint_token = cny_amount;
     } else {
-      mint_token = parseFloat(cny_amount * total_liquidity / cny_reserve);
+      mint_token = cny_amount * total_liquidity / cny_reserve;
     }
-    return mint_token;
+    return parseFloat(mint_token.toFixed(8));
   }
   async getPoolSize(amount, symbol) {
     const exchange = await this.getExchange(symbol);
@@ -124,18 +124,20 @@ class ExchangeService extends Service {
     return this.getInputPrice(cny_sold, cny_reserve, token_reserve);
   }
   async addLiquidity(token1_symbol, token1_amount, token2_symbol, token2_amount, min_liquidity, max_tokens) {
+    token1_amount = parseFloat(token1_amount);
+    token2_amount = parseFloat(token2_amount);
     const { ctx } = this;
     // from user
     const from_address = ctx.user.address;
     const from_username = ctx.user.username;
     const token1_balance = await ctx.service.okex.queryAccountBalance(from_address, token1_symbol);
     // token1 balance not enough
-    if (parseFloat(token1_amount) > parseFloat(token1_balance)) {
+    if (token1_amount > parseFloat(token1_balance)) {
       return -2;
     }
     const token2_balance = await ctx.service.okex.queryAccountBalance(from_address, token2_symbol);
     // token2 balance not enough
-    if (parseFloat(token2_amount) > parseFloat(token2_balance)) {
+    if (token2_amount > parseFloat(token2_balance)) {
       return -2;
     }
     // UPDATE lock
@@ -162,7 +164,8 @@ class ExchangeService extends Service {
         // 你打入的钱按照池子里现有的cny_reserve来计算你的份额
         const liquidity_minted = parseFloat((token1_amount * total_liquidity / token1_reserve).toFixed(8));
         // 不满足token最大值和份额最小值条件，则流动性添加失败
-        if (max_tokens < token1_amount || liquidity_minted < min_liquidity) {
+        if (max_tokens < token2_amount || liquidity_minted < min_liquidity) {
+          this.logger.error('ExchangeService::addLiquidity error 2', { max_tokens, token2_amount, liquidity_minted, min_liquidity });
           transaction.rollback();
           return -1;
         }
@@ -178,6 +181,7 @@ class ExchangeService extends Service {
         const transferResult = await this.service.okex.multiTransfer(from_address, to_address, assets);
         // 转移资产失败
         if (!transferResult) {
+          this.logger.error('ExchangeService::addLiquidity transfer error', transferResult);
           transaction.rollback();
           return -1;
         }
@@ -450,12 +454,13 @@ class ExchangeService extends Service {
       this.logger.error('ExchangeService::tokenToCnyInput error exchange does not exist, symbol: %j', token2_symbol);
       return -1;
     }
-    const to_address = exchange.holder_to_address;
+    const to_address = exchange.holder_address;
 
     const token1_reserve = await ctx.service.okex.queryAccountBalance(to_address, token1_symbol);
     const token2_reserve = await ctx.service.okex.queryAccountBalance(to_address, token2_symbol);
     const cny_bought = this.getInputPrice(tokens_sold, token2_reserve, token1_reserve);
     if (cny_bought < min_cny) {
+      this.logger.error('ExchangeService::tokenToCnyInput error 2 %j', { cny_bought, min_cny });
       return -1;
     }
     // transfer token

@@ -7,3 +7,25 @@ html {
 a {
     color: #2d60e0;
 }
+.el-message-box {
+    background-color: rgb(33, 36, 41)!important;
+    border-color: rgb(33, 36, 41)!important;
+}
+.el-message-box .el-message-box__header .el-message-box__title {
+    color: #fff;
+}
+.el-message-box .el-message-box__content {
+    color: #ccc;
+}
+.el-message-box .el-message-box__btns button {
+    background-color: #d93025;
+    border-color: #d93025;
+    width: 25%;
+}
+.el-message {
+    background-color: rgb(33, 36, 41)!important;
+    border-color: rgb(33, 36, 41)!important;
+}
+/* .el-message .el-icon-error, .el-message .el-message__content  {
+    color: #d93025!important;
+} */

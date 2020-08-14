@@ -144,6 +144,7 @@
     </div>
     <TokenListModal
       v-model="tlShow"
+      :addon="true"
       @selectToken="selectToken"
     />
   </div>
@@ -176,7 +177,6 @@ export default {
         input: 0,
         output: 0
       },
-      swapLoading: true,
       INPUT,
       OUTPUT
     }
@@ -254,20 +254,42 @@ export default {
       }
     },
     async onSubmit() {
-      const { input, inputToken, outputToken } = this.from
-      this.btnLoading = true
+      const { input, inputToken, outputToken } = this.form
+      if (!input) {
+        this.$message.error('Not a valid input value')
+        return
+      }
+      if (!inputToken.token2_symbol || !outputToken.token2_symbol) {
+        this.$message.error('Please select a token to continue.')
+        return
+      }
+      this.$store.commit('SET_PAGE_LOADING', true)
+      let res = null
       if (inputToken.token2_symbol === OKT.token2_symbol) {
-        await this.$request.post('/api/exchange/oktToTokenInput', {
+        res = await this.$request.post('/api/exchange/oktToTokenInput', {
           symbol: outputToken.token2_symbol,
           okt_amount: input
         })
       } else {
-        await this.$request.post('/api/exchange/tokenToOktInput', {
+        res = await this.$request.post('/api/exchange/tokenToOktInput', {
           symbol: inputToken.token2_symbol,
           token_amount: input
         })
       }
-      this.btnLoading = false
+      this.$store.commit('SET_PAGE_LOADING', false)
+      let msg = ''
+      if (res.code === 0) {
+        msg = '🚀 swap successful~'
+      } else {
+        msg = '❌ swap failed!'
+      }
+      this.$alert(msg, 'Tips', {
+        showClose: false,
+        callback: (action) => {
+          console.log(action)
+          window.location.reload()
+        }
+      })
     },
     getOutputAmount(inputSymbol, outputSymbol, amount) {
       if (inputSymbol === OKT.token2_symbol) {

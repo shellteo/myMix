@@ -61,6 +61,10 @@ export default {
     value: {
       type: Boolean,
       default: false
+    },
+    addon: {
+      type: Boolean,
+      default: true
     }
   },
   computed: {
@@ -94,10 +98,14 @@ export default {
       this.loading = true
       const res = await this.$request.get('/api/exchange')
       if (res.code === 0) {
-        this.tokenList = [
-          OKT,
-          ...res.data.rows
-        ]
+        if (this.addon) {
+          this.tokenList = [
+            OKT,
+            ...res.data.rows
+          ]
+        } else {
+          this.tokenList = res.data.rows
+        }
       }
       this.loading = false
     }

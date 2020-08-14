@@ -8,7 +8,7 @@ export const state = () => {
     loginModalType: 1,
     loginModalTitle: 'false',
     userModalShow: false,
-    pageLoading: true
+    pageLoading: false
   }
 }
 
