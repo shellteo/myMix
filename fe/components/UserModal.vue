@@ -69,7 +69,7 @@ export default {
   },
   mounted() {
     this.account()
-    // this.exchange()
+    this.exchange()
     // this.balance()
   },
   methods: {
@@ -89,10 +89,6 @@ export default {
     async exchange() {
       const res = await this.$request.get('/api/user/exchange', { params: { symbol: 'tokb' } })
       console.log('exchange: ', res)
-    },
-    async balance() {
-      const res = await this.$request.get('/api/user/balance', { params: { symbol: 'tokb' } })
-      console.log('balance: ', res)
     }
   }
 }

@@ -17,14 +17,14 @@
             class="gcotIA"
             type="number"
             min="0"
-            step="0.000000000000000001"
+            step="0.00000001"
             placeholder="0.0"
             @input="inputChange"
             @keypress="isNumber"
           >
           <button
             class="iAoRgd"
-            @click="tlShow = true;field = 'inputToken'"
+            @click="tlShow = true;field = INPUT"
           >
             <span class="rTZzf">
               {{ form.inputToken.token2_symbol || 'Select a token' }}
@@ -60,14 +60,14 @@
             class="gcotIA"
             type="number"
             min="0"
-            step="0.0001"
+            step="0.00000001"
             placeholder="0.0"
-            @input="outputChange"
+            readonly
             @keypress="isNumber"
           >
           <button
             class="iAoRgd"
-            @click="tlShow = true;field = 'outputToken'"
+            @click="tlShow = true;field = OUTPUT"
           >
             <span class="rTZzf">
               {{ form.outputToken.token2_symbol || 'Select a token' }}
@@ -98,25 +98,25 @@
     >
       <div class="hRyusy">
         <div v-if="base === 'input'">
-          你正在出售
+          You are sending
           <span class="iDChvK">
             <span class="jbXIaP">{{ form.input }} {{ form.inputToken.token2_symbol }}</span>
-          </span> 最少获得
+          </span> will receive at least
           <span class="iDChvK">
             <span class="jbXIaP">{{ limitValue }} {{ form.outputToken.token2_symbol }}</span>
           </span>
         </div>
         <div v-else>
-          你正在购买
+          You are buying
           <span class="iDChvK">
             <span class="jbXIaP">{{ form.output }} {{ form.outputToken.token2_symbol }}</span>
-          </span> 最多需要
+          </span> It will cost at most
           <span class="iDChvK">
             <span class="jbXIaP">{{ limitValue }} {{ form.inputToken.token2_symbol }}</span>
           </span>
         </div>
         <div class="sc-bsbRJL kxtVAF">
-          预期价格滑落
+          Expected price slippage
           <span class="iDChvK">
             <span class="jbXIaP">{{ priceSlippage * 100 }}%</span>
           </span>
@@ -125,7 +125,8 @@
             effect="light"
           >
             <div slot="content">
-              您的交易可能由于正常的价格波动而失败，<br>价格滑落区间将有助于您的交易成功
+              Lowering this limit decreases your risk of frontrunning.<br>
+              However, this makes more likely that your transaction will fail due to normal price movements.
             </div>
             <i class="el-icon-question" />
           </el-tooltip>
@@ -151,7 +152,7 @@
 <script>
 import debounce from 'lodash/debounce'
 import TokenListModal from './TokenList'
-import { OKT, INPUT } from './consts.js'
+import { OKT, INPUT, OUTPUT } from './consts.js'
 
 // import utils from '@/utils/index'
 
@@ -176,40 +177,44 @@ export default {
       balance: {
         input: 0,
         output: 0
-      }
+      },
+      INPUT,
+      OUTPUT
     }
   },
   computed: {
-    tokensId() {
-      return 0
-    },
-    type() {
-      return this.base === 'input' ? 'buy_token_input' : 'buy_token_output'
-    },
     btnDisabled() {
       return true
     },
     limitValue() {
+      const { output } = this.form
+      const { base } = this
+      // 以input为准计算
+      if (base === 'input') {
+        if (output) {
+          return this.getMinTokens(output)
+        }
+      }
       return '-'
     },
     exchangeRate() {
+      const { input, output } = this.form
+      if (input && output) {
+        return ((1 / input) * output).toFixed(4)
+      }
       return ''
     }
   },
   mounted() {
-    this.getTokenBySymbol()
+    console.log('mounted')
+    this.getBalance(OKT.token2_symbol, 'input')
   },
   methods: {
-    async getTokenBySymbol() {
+    getMaxTokens(v) {
+      return parseFloat((parseFloat(v) / (1 - this.priceSlippage)).toFixed(8))
     },
-    addRouterQuery(symbol) {
-      this.$router.replace({
-        hash: this.$route.hash,
-        query: {
-          ...this.$route.query,
-          [this.field === INPUT ? 'input' : 'output']: symbol
-        }
-      })
+    getMinTokens(v) {
+      return parseFloat((parseFloat(v) * (1 - this.priceSlippage)).toFixed(8))
     },
     isNumber(event) {
       if (!/\d/.test(event.key) && event.key !== '.') {
@@ -217,16 +222,74 @@ export default {
       }
     },
     inputChange: debounce(function (e) {
+      const value = e.target.value
+      this.form.input = value
+      this.base = 'input'
+      this.form.output = ''
+      const { input, inputToken, outputToken } = this.form
+      if (input && inputToken.token2_symbol && outputToken.token2_symbol) {
+        this.getOutputAmount(inputToken.token2_symbol, outputToken.token2_symbol, input)
+      }
     }, 500),
-    outputChange: debounce(function (e) {
-    }, 500),
+    /* outputChange: debounce(function (e) {
+      const value = e.target.value
+      this.form.output = value
+      this.base = 'output'
+      this.form.input = ''
+      const { inputToken, output, outputToken } = this.form
+      if (output && inputToken && outputToken) {
+        this.getInputAmount(inputToken.id, outputToken.id, output)
+      }
+    }, 500), */
     selectToken(token) {
+      this.form[this.field] = token
+      // 输入输出token不能相同
+      if (this.form[INPUT] === this.form[OUTPUT]) {
+        this.form[this.field === INPUT ? OUTPUT : INPUT] = ''
+        this.form[this.field === INPUT ? 'output' : 'input'] = ''
+      }
+      this.getBalance(token.token2_symbol, this.field === INPUT ? 'input' : 'output')
+      const { input, inputToken, outputToken } = this.form
+      if (input && inputToken.token2_symbol && outputToken.token2_symbol) {
+        this.getOutputAmount(inputToken.token2_symbol, outputToken.token2_symbol, input)
+      }
     },
     onSubmit() {
     },
-    getOutputAmount(inputTokenId, outputTokenId, inputAmount) {
+    getOutputAmount(inputSymbol, outputSymbol, amount) {
+      if (inputSymbol === OKT.token2_symbol) {
+        this.getTokenPrice(outputSymbol, amount)
+      } else {
+        this.getOktPrice(inputSymbol, amount)
+      }
     },
-    getInputAmount(inputTokenId, outputTokenId, outputAmount) {
+    async getTokenPrice(outputSymbol, inputAmount) {
+      const res = await this.$request.get('/api/exchange/getOktToTokenInputPrice', {
+        params: {
+          symbol: outputSymbol,
+          okt_amount: inputAmount
+        }
+      })
+      if (res.code === 0) {
+        this.form.output = parseFloat(res.data)
+      } else {
+        this.form.output = ''
+      }
+    },
+    async getOktPrice(inputSymbol, inputAmount) {
+      const res = await this.$request.get('/api/exchange/getTokenToOktInputPrice', {
+        params: {
+          symbol: inputSymbol,
+          token_amount: inputAmount
+        }
+      })
+      if (res.code === 0) {
+        this.form.output = parseFloat(res.data)
+      } else {
+        this.form.output = ''
+      }
+    },
+    async getInputAmount(inputSymbol, inputAmount) {
     },
     successNotice(text) {
       this.$message.success({
@@ -242,13 +305,15 @@ export default {
         showClose: true
       })
     },
-    // 获取用户余额
-    getUserBalance(tokenId, type) {
-    },
-    // 检测余额
-    checkBalance(showError = true) {
-    },
     swap() {
+    },
+    async getBalance(symbol, type) {
+      console.log('getBalance')
+      const res = await this.$request.get('/api/user/balance', { params: { symbol } })
+      console.log('getBalance', res)
+      if (res.code === 0) {
+        this.balance[type] = parseFloat(res.data)
+      }
     }
   }
 }

@@ -35,7 +35,7 @@ module.exports = app => {
   router.get('/api/exchange/getPoolCnyToTokenPrice', controller.exchange.getPoolCnyToTokenPrice);
   router.get('/api/exchange/getMintLiquidity', controller.exchange.getMintLiquidity);
   router.get('/api/exchange/getPoolSize', controller.exchange.getPoolSize);
-  router.get('/api/exchange/:symbol', controller.exchange.show);
+  router.get('/api/exchange/info/:symbol', controller.exchange.show);
   router.get('/api/exchange', controller.exchange.index);
 
   // user balance

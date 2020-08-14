@@ -18,9 +18,12 @@
           <div class="jUAxZT">
             <span>{{ isDelete ? 'Delete' : 'Input' }}</span>
           </div>
-          <div v-if="isDelete && form.outputToken.symbol && form.outputToken.id !== 0">
-            Liquidity: {{ yourPoolSize.your_supply }}
+          <div v-if="isDelete && form.outputToken.token2_symbol">
+            Liquidity: {{ yourPoolSize.user_liquidity }}
           </div>
+          <!-- <div else>
+            Balance: {{ balance.add }}
+          </div> -->
         </div>
         <!--------------------- 删除流动金代码开始 ---------------------->
         <div
@@ -33,7 +36,7 @@
             class="gcotIA"
             type="number"
             min="0"
-            step="0.000000000000000001"
+            step="0.00000001"
             placeholder="0.0"
             @input="outputChange"
             @keypress="isNumber"
@@ -43,7 +46,7 @@
             @click="tlShow = true;field = 'outputToken'"
           >
             <span class="rTZzf">
-              {{ form.outputToken.symbol || 'Se' }}
+              {{ form.outputToken.token2_symbol || 'Select a token' }}
               <i class="el-icon-arrow-down" />
             </span>
           </button>
@@ -58,14 +61,14 @@
             class="gcotIA"
             type="number"
             min="0"
-            step="0.000000000000000001"
+            step="0.00000001"
             placeholder="0.0"
             @input="inputChange"
             @keypress="isNumber"
           >
           <button class="iAoRgd">
             <span class="rTZzf">
-              {{ form.inputToken.symbol || 'Select a token' }}
+              {{ form.inputToken.token2_symbol || 'Select a token' }}
               <!-- <i class="el-icon-arrow-down"></i> -->
             </span>
           </button>
@@ -91,9 +94,9 @@
       <div class="iNUelT">
         <div class="OpDFW">
           <div class="jUAxZT">
-            <span>{{ isDelete ? '输出（预估）' : 'Input' }}</span>
+            <span>{{ isDelete ? 'Output (estimated)' : 'Input' }}</span>
           </div>
-          <div v-if="form.outputToken.symbol && form.outputToken.id !== 0 && !isDelete">
+          <div v-if="form.outputToken.token2_symbol && !isDelete">
             Balance: {{ balance.add }}
           </div>
         </div>
@@ -102,15 +105,15 @@
           v-if="isDelete"
           class="cHbrWc"
         >
-          <template v-if="outputPoolSize.cny_amount !== 0">
+          <template v-if="outputPoolSize.okt_amount !== 0">
             <div class="kroqsf">
-              {{ outputPoolSize.cny_amount.toFixed(4) }} OKT
+              {{ outputPoolSize.okt_amount }} OKT
             </div>
             <div class="jlBXmz">
               +
             </div>
             <div class="kroqsf">
-              {{ outputPoolSize.token_amount.toFixed(4) }} {{ form.outputToken.symbol }}
+              {{ outputPoolSize.token_amount }} {{ form.outputToken.token2_symbol }}
             </div>
           </template>
         </div>
@@ -126,7 +129,7 @@
             class="gcotIA"
             type="number"
             min="0"
-            step="0.000000000000000001"
+            step="0.00000001"
             placeholder="0.0"
             @input="outputChange"
             @keypress="isNumber"
@@ -136,7 +139,7 @@
             @click="tlShow = true;field = 'outputToken'"
           >
             <span class="rTZzf">
-              {{ form.outputToken.symbol || 'Select a token' }}
+              {{ form.outputToken.token2_symbol || 'Select a token' }}
               <i class="el-icon-arrow-down" />
             </span>
           </button>
@@ -147,17 +150,17 @@
       <div class="exKIZr" />
       <div class="lfiYXW">
         <span class="sc-hORach icyNSS">Price</span>
-        <span v-if="exchangeRate">1 OKT = {{ exchangeRate }} {{ form.outputToken.symbol }}</span>
+        <span v-if="price">1 {{ form.outputToken.token2_symbol }} = {{ price }} okt</span>
         <span v-else> - </span>
       </div>
       <div class="lfiYXW">
-        <span class="sc-hORach icyNSS">当前流动金池总量</span>
-        <span v-if="form.outputToken.symbol">{{ currentPoolSize.cny_amount }} OKT + {{ currentPoolSize.token_amount }} {{ form.outputToken.symbol }}</span>
+        <span class="sc-hORach icyNSS">Current Pool Size</span>
+        <span v-if="form.outputToken.token2_symbol">{{ currentPoolSize.okt_reserve }} OKT + {{ currentPoolSize.token_reserve }} {{ form.outputToken.token2_symbol }}</span>
         <span v-else> - </span>
       </div>
       <div class="lfiYXW">
-        <span class="sc-hORach icyNSS">你占流动金池份额 （{{ yourPercent }}）</span>
-        <span v-if="form.outputToken.symbol">{{ yourPoolSize.cny_amount }} OKT + {{ yourPoolSize.token_amount }} {{ form.outputToken.symbol }}</span>
+        <span class="sc-hORach icyNSS">Your Pool Share ({{ yourPercent }})</span>
+        <span v-if="form.outputToken.token2_symbol">{{ yourPoolSize.okt_amount }} OKT + {{ yourPoolSize.token_amount }} {{ form.outputToken.token2_symbol }}</span>
         <span v-else> - </span>
       </div>
     </div>
@@ -176,23 +179,23 @@
     >
       <div class="hRyusy">
         <div>
-          你正在添加
+          You are adding
           <span class="iDChvK">
             <span class="jbXIaP">{{ form.input }} OKT</span>
-          </span> 和最多
+          </span> and
           <span class="iDChvK">
-            <span class="jbXIaP">{{ limitValue }} {{ form.outputToken.symbol }}</span>
-          </span>到流动金池中。
+            <span class="jbXIaP">{{ getMaxTokens }} {{ form.outputToken.token2_symbol }}</span>
+          </span>into the liquidity pool.
         </div>
         <div class="sc-bsbRJL kxtVAF">
-          你将会挖到
+          You will mint
           <span class="iDChvK">
             <span class="jbXIaP"> {{ youMintTokenAmount }} </span>
           </span>
-          流动金Token 作为凭证
+          liquidity tokens.
         </div>
         <div class="sc-bsbRJL kxtVAF">
-          当前 流动金Token 的总量是
+          Current total supply of liquidity tokens is
           <span class="iDChvK">
             <span class="jbXIaP"> {{ currentPoolSize.total_supply || 0 }} </span>
           </span>
@@ -225,7 +228,7 @@
 import debounce from 'lodash/debounce'
 import TokenListModal from './TokenList'
 import PoolSelectModal from './PoolSelect'
-import { OKT, INPUT } from './consts.js'
+import { OKT, OUTPUT } from './consts.js'
 
 // import utils from '@/utils/index'
 
@@ -252,14 +255,14 @@ export default {
       outputReadOnly: true,
       // display 计算data
       currentPoolSize: {
-        cny_amount: 0,
-        token_amount: 0,
-        total_supply: 0
+        total_supply: 0,
+        token_reserve: 0,
+        okt_reserve: 0
       },
       yourPoolSize: {
-        cny_amount: 0,
+        okt_amount: 0,
         token_amount: 0,
-        your_supply: 0
+        user_liquidity: 0
       },
       youMintTokenAmount: 0,
       poolSelected: {
@@ -267,59 +270,57 @@ export default {
         text: 'Add Liquidity'
       },
       outputPoolSize: {
-        cny_amount: 0,
+        okt_amount: 0,
         token_amount: 0
       },
       balance: {
         add: 0, // 添加流动性余额
         delete: 0 // 删除流动性余额
-      }
+      },
+      price: ''
     }
   },
   computed: {
-    tokensId() {
-      return 0
-    },
     yourPercent() {
-      return '0%'
+      const yourSupply = parseFloat(this.yourPoolSize.user_liquidity)
+      const totalSupply = parseFloat(this.currentPoolSize.total_supply)
+      if (yourSupply === 0 || totalSupply === 0) {
+        return '0%'
+      } else {
+        return `${(yourSupply / totalSupply * 100).toFixed(2)}%`
+      }
     },
     // 是否是删除流动金
     isDelete() {
-      return false
+      // 添加流动金
+      if (this.poolSelected.id === 0) {
+        return false
+      } else {
+      // 删除流动金
+        return true
+      }
     },
     btnDisabled() {
       return false
     },
-    limitValue() {
+    getMaxTokens(v) {
+      const { output } = this.form
+      if (output) {
+        return parseFloat((parseFloat(output) / (1 - this.priceSlippage)).toFixed(8))
+      }
       return '-'
     },
     exchangeRate() {
       return ''
     }
   },
-  async asyncData() {},
   async mounted() {
-    await this.getTokenBySymbol()
   },
   methods: {
-    async getTokenBySymbol() {
-    },
-    addRouterQuery(symbol) {
-      this.$router.replace({
-        hash: this.$route.hash,
-        query: {
-          ...this.$route.query,
-          [this.field === INPUT ? 'input' : 'output']: symbol
-        }
-      })
-    },
     isNumber(event) {
       if (!/\d/.test(event.key) && event.key !== '.') {
         return event.preventDefault()
       }
-    },
-    calLimitValue(v) {
-      return parseFloat(v) * (1 - this.priceSlippage)
     },
     selectPool(val) {
       // 修改form，重置
@@ -330,16 +331,63 @@ export default {
         outputToken: {}
       }
       this.outputPoolSize = {
-        cny_amount: 0,
+        okt_amount: 0,
         token_amount: 0
       }
+      this.price = ''
       this.poolSelected = val
     },
     inputChange: debounce(function (e) {
+      const value = e.target.value
+      this.form.input = value
+      const { input, outputToken } = this.form
+      if (input && outputToken.token2_symbol) {
+        // 获取输出token的数量
+        this.getTokenAmountByOkt(outputToken.token2_symbol, input)
+        // 获取你能挖到的数量
+        this.getMintLiquidityByOkt(outputToken.token2_symbol, input)
+      }
     }, 500),
     outputChange(e) {
+      const value = e.target.value
+      this.form.output = value
+      /* ---------------------- 删除流动金逻辑开始 --------------------- */
+      if (this.isDelete) {
+        const { output, outputToken } = this.form
+        if (output && outputToken.token2_symbol) {
+          this.getPoolSizeByLiquidity(outputToken.token2_symbol, output)
+        }
+      }
+      /* ---------------------- 删除流动金逻辑结束 --------------------- */
     },
     selectToken(token) {
+      this.form[this.field] = token
+      const symbol = token.token2_symbol
+      // 获取个人占比
+      this.getYourPoolSize(symbol)
+      // 获取总池子大小
+      this.getCurrentPoolSize(symbol)
+      this.getPrice(symbol)
+      if (this.field === OUTPUT) {
+        this.getBalance(symbol, this.isDelete ? 'delete' : 'add')
+        if (this.isDelete) {
+          /* ---------------------- 删除流动金逻辑开始 --------------------- */
+          const { output } = this.form
+          if (output) {
+            this.getPoolSizeByLiquidity(symbol, output)
+            // this.getInputAmount(inputToken.id, token.id, output)
+          }
+          /* ---------------------- 删除流动金逻辑结束 --------------------- */
+        } else {
+          const { input } = this.form
+          if (input) {
+            // 获取输出token的数量
+            this.getTokenAmountByOkt(symbol, input)
+            // 获取你能挖到的数量
+            this.getMintLiquidityByOkt(symbol, input)
+          }
+        }
+      }
     },
     getInputAmount(inputTokenId, outputTokenId, outputAmount) {
     },
@@ -349,15 +397,83 @@ export default {
     },
     addLiquidity() {
     },
-    getCurrentPoolSize(tokenId) {
-    },
-    getYourPoolSize(tokenId) {
-    },
-    getYourMintToken(tokenId, amountBefore) {
-    },
-    getOutputPoolSize(amountBefore, tokenId) {
-    },
     removeLiquidity() {
+    },
+    // 根据okt获取token数量
+    async getTokenAmountByOkt(symbol, oktAmount) {
+      const res = await this.$request.get('/api/exchange/getPoolCnyToTokenPrice', {
+        params: {
+          symbol,
+          okt_amount: oktAmount
+        }
+      })
+      if (res.code === 0) {
+        this.outputReadOnly = true
+        this.form.output = res.data
+      } else {
+        this.form.output = ''
+        this.outputReadOnly = false
+      }
+    },
+    // 根据流动金数量获取 okt + token amount
+    async getPoolSizeByLiquidity(symbol, liquidity) {
+      const res = await this.$request.get('/api/exchange/getPoolSize', { params: { symbol, liquidity } })
+      if (res.code === 0) {
+        this.outputPoolSize = {
+          okt_amount: res.data.token1_amount,
+          token_amount: res.data.token2_amount
+        }
+      } else {
+        this.outputPoolSize = {
+          okt_amount: 0,
+          token_amount: 0
+        }
+      }
+    },
+    // 获取token价格
+    async getPrice(symbol, token_amount = 1) {
+      const res = await this.$request.get('/api/exchange/getTokenToOktInputPrice', {
+        params: {
+          symbol,
+          token_amount
+        }
+      })
+      if (res.code === 0) {
+        this.price = parseFloat(res.data)
+      } else {
+        this.price = ''
+      }
+    },
+    async getCurrentPoolSize(symbol) {
+      const res = await this.$request.get(`/api/exchange/info/${symbol}`)
+      if (res.code === 0) {
+        this.currentPoolSize = res.data
+      }
+    },
+    // 根据输入的okt数量计算获取的流动金
+    async getMintLiquidityByOkt(symbol, oktAmount) {
+      const res = await this.$request.get('/api/exchange/getMintLiquidity', {
+        params: {
+          symbol,
+          okt_amount: oktAmount
+        }
+      })
+      if (res.code === 0) {
+        this.youMintTokenAmount = res.data
+      }
+    },
+    async getBalance(symbol, type) {
+      const res = await this.$request.get('/api/user/balance', { params: { symbol } })
+      if (res.code === 0) {
+        this.balance[type] = parseFloat(res.data)
+      }
+    },
+    // 获取用户pool里的信息
+    async getYourPoolSize(symbol) {
+      const res = await this.$request.get('/api/user/exchange', { params: { symbol } })
+      if (res.code === 0) {
+        this.yourPoolSize = res.data
+      }
     },
     successNotice(text) {
       this.$message.success({
@@ -372,12 +488,6 @@ export default {
         duration: 4000,
         showClose: true
       })
-    },
-    // 获取用户余额
-    getUserBalance(tokenId, type) {
-    },
-    // 检测余额
-    checkBalance(showError = true) {
     }
   }
 }

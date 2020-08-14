@@ -169,7 +169,7 @@ class UserController extends Controller {
         data: {
           okt_amount: 0,
           token_amount: 0,
-          liquidity: 0,
+          user_liquidity: 0,
         },
       };
       return;

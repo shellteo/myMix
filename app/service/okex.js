@@ -91,6 +91,7 @@ class OkexService extends Service {
     const result = await this.app.curl(url, {
       method: 'GET',
       dataType: 'json',
+      timeout: 10000,
     });
     if (result.status === 200 && result.data.code === 0) {
       return result.data.data;
