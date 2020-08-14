@@ -154,8 +154,6 @@ import debounce from 'lodash/debounce'
 import TokenListModal from './TokenList'
 import { OKT, INPUT, OUTPUT } from './consts.js'
 
-// import utils from '@/utils/index'
-
 export default {
   components: {
     TokenListModal
@@ -178,13 +176,14 @@ export default {
         input: 0,
         output: 0
       },
+      swapLoading: true,
       INPUT,
       OUTPUT
     }
   },
   computed: {
     btnDisabled() {
-      return true
+      return false
     },
     limitValue() {
       const { output } = this.form
@@ -254,7 +253,21 @@ export default {
         this.getOutputAmount(inputToken.token2_symbol, outputToken.token2_symbol, input)
       }
     },
-    onSubmit() {
+    async onSubmit() {
+      const { input, inputToken, outputToken } = this.from
+      this.btnLoading = true
+      if (inputToken.token2_symbol === OKT.token2_symbol) {
+        await this.$request.post('/api/exchange/oktToTokenInput', {
+          symbol: outputToken.token2_symbol,
+          okt_amount: input
+        })
+      } else {
+        await this.$request.post('/api/exchange/tokenToOktInput', {
+          symbol: inputToken.token2_symbol,
+          token_amount: input
+        })
+      }
+      this.btnLoading = false
     },
     getOutputAmount(inputSymbol, outputSymbol, amount) {
       if (inputSymbol === OKT.token2_symbol) {

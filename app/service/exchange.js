@@ -73,8 +73,8 @@ class ExchangeService extends Service {
     const cny_amount = amount * cny_reserve / total_liquidity;
     const token_amount = amount * token_reserve / total_liquidity;
     return {
-      token1_amount: cny_amount,
-      token2_amount: token_amount,
+      token1_amount: parseFloat(cny_amount.toFixed(8)),
+      token2_amount: parseFloat(token_amount.toFixed(8)),
     };
   }
   async getPoolCnyToTokenPrice(symbol, amount) {
@@ -92,7 +92,7 @@ class ExchangeService extends Service {
     }
     // 非首次add，按照当前的价格计算出token数量
     const token_amount = amount * token_reserve / cny_reserve + 0.00000001;
-    return token_amount;
+    return parseFloat(token_amount.toFixed(8));
   }
   // 计算使用token兑换cny的数量，以输入的token数量为准
   async getTokenToCnyInputPrice(symbol, tokens_sold) {

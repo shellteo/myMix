@@ -7,7 +7,8 @@ export const state = () => {
     loginModalShow: false,
     loginModalType: 1,
     loginModalTitle: 'false',
-    userModalShow: false
+    userModalShow: false,
+    pageLoading: true
   }
 }
 
@@ -33,6 +34,9 @@ export const mutations = {
   },
   SET_USER_MODAL_SHOW(state, show) {
     state.userModalShow = show
+  },
+  SET_PAGE_LOADING(state, loading) {
+    state.pageLoading = loading
   }
 }
 

@@ -37,7 +37,7 @@
         </svg>
       </div>
       <div class="text-container">
-        <h2>TO THE MOON...</h2>
+        <h2>LOADING...</h2>
       </div>
       <div class="smoke">
         <span />
