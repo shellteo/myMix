@@ -8,6 +8,9 @@ Traders pay a 30-basis-point fee on trades, which goes to liquidity providers. S
 ## Swap And Add Liquidity
 A small liquidity provider fee (0.30%) is taken out of each trade and added to the reserves. While the OKT-Token reserve ratio is constantly shifting, fees makes sure that the total combined reserve size increases with every trade. This functions as a payout to liquidity providers that is collected when they burn their pool tokens to withdraw their portion of total reserves. Guaranteed arbitrage opportunities from price fluctuations should push a steady flow of transactions through the system and increase the amount of fee revenue generated.
 
+## demo video
+[https://www.youtube.com/watch?v=YmpsitNKFqs&feature=youtu.be](https://www.youtube.com/watch?v=YmpsitNKFqs&feature=youtu.be)
+
 
 ![swap](https://mixswap.oss-cn-hangzhou.aliyuncs.com/swap.jpg)
 ![addLiquidity](https://mixswap.oss-cn-hangzhou.aliyuncs.com/addLiquidity.jpg)
@@ -18,6 +21,7 @@ You can create a account using this system and sign in!
 ![sign up](https://mixswap.oss-cn-hangzhou.aliyuncs.com/signup.jpg)
 ![mnemonic](https://mixswap.oss-cn-hangzhou.aliyuncs.com/mnemonic.jpg)
 ![sign in](https://mixswap.oss-cn-hangzhou.aliyuncs.com/signin.jpg)
+
 
 ### Development
 
