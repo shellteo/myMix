@@ -23,7 +23,7 @@
 </template>
 <script>
 // import { mapGetters } from 'vuex'
-import { getCookie } from '@/utils/index'
+import { getToken } from '@/utils/index'
 import consts from '@/utils/consts'
 export default {
   components: {
@@ -41,7 +41,7 @@ export default {
   },
   mounted() {
     this.page = this.$route.name
-    this.isLogined = !!getCookie('ACCESS_TOKEN')
+    this.isLogined = !!getToken('ACCESS_TOKEN')
     if (this.isLogined) {
       this.getBalance()
     }

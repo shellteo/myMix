@@ -62,6 +62,8 @@ class ExchangeController extends Controller {
       ctx.body = ctx.msg.tokenNotExist;
     } else if (result === -2) {
       ctx.body = ctx.msg.exchangeExist;
+    } else if (result === -3) {
+      ctx.body = ctx.msg.failed;
     } else {
       ctx.body = {
         ...ctx.msg.success,

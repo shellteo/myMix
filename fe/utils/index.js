@@ -16,15 +16,13 @@ export function isAddress(value) {
 export function isEmptyAddress(address) {
   return address === '0x0000000000000000000000000000000000000000'
 }
-export function setCookie(name, value, days = 1) {
-  const d = new Date()
-  d.setTime(d.getTime() + 24 * 60 * 60 * 1000 * days)
-  document.cookie = name + '=' + value + ';path=/;expires=' + d.toGMTString()
+export function SetToken(v) {
+  localStorage.setItem('ACCESS_TOKEN', v)
 }
-export function getCookie(name) {
-  const v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)')
-  return v ? v[2] : null
+export function getToken() {
+  const token = localStorage.getItem('ACCESS_TOKEN')
+  return token
 }
-export function delCookie(name) {
-  this.setCookie(name, '', -1)
+export function removeToken() {
+  localStorage.removeItem('ACCESS_TOKEN')
 }

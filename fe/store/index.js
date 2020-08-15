@@ -1,4 +1,4 @@
-// import { getCookie } from '@/utils/index'
+// import { getToken } from '@/utils/index'
 
 export const state = () => {
   return {
@@ -14,7 +14,7 @@ export const state = () => {
 
 export const getters = {
   isLogined: () => {
-    /* if (getCookie('ACCESS_TOKEN')) {
+    /* if (getToken('ACCESS_TOKEN')) {
       return true
     } else {
       return false

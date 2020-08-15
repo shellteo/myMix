@@ -61,7 +61,7 @@ export default {
 }
 </script>
 <style lang="scss">
-$bg-color: rgb(33, 36, 41);;
+$bg-color: rgb(33, 36, 41);
 $purpleDark: #d93025;
 $borderRadius6: 6px;
 #site-wrapper {

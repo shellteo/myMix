@@ -34,11 +34,15 @@
           label="Locked"
         />
       </el-table>
+      <div class="btns">
+        <el-button type="info" plain @click="logout">Logout</el-button>
+      </div>
     </div>
   </el-dialog>
 </template>
 
 <script>
+import { removeToken } from '@/utils/index'
 export default {
   name: 'UserModal',
   props: {
@@ -89,6 +93,13 @@ export default {
     async exchange() {
       const res = await this.$request.get('/api/user/exchange', { params: { symbol: 'tokb' } })
       console.log('exchange: ', res)
+    },
+    logout() {
+      this.showModal = false
+      removeToken()
+      this.$router.push({
+        path: '/wallet#sign_in'
+      })
     }
   }
 }
@@ -118,6 +129,13 @@ export default {
       white-space: nowrap;
       margin: 0px;
       overflow: hidden;
+    }
+  }
+  .btns {
+    padding: 40px 0;
+    text-align: center;
+    button {
+      width: 40%;
     }
   }
 }

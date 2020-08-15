@@ -49,7 +49,7 @@
         </span>
       </div>
       <br>
-      <el-button class="mix-btn" type="primary" native-type="submit" @click="submit">
+      <el-button class="mix-btn" type="primary" native-type="submit" @click="Written">
         Mnemonic Already Written Down
       </el-button>
     </div>
@@ -57,6 +57,7 @@
 </template>
 
 <script>
+import { SetToken } from '@/utils'
 export default {
   data() {
     const validatePass2 = (rule, value, callback) => {
@@ -89,9 +90,9 @@ export default {
       if (value === '') {
         callback(new Error('Please enter username'))
       } else {
-        const containsEightCharacters = value.length > 6
+        const containsEightCharacters = value.length >= 6
         if (!containsEightCharacters) {
-          callback(new Error('Incorrect format:username length need > 6!'))
+          callback(new Error('Incorrect format:username length need >= 6!'))
         } else {
           callback()
         }
@@ -134,6 +135,11 @@ export default {
     }
   },
   methods: {
+    Written() {
+      this.$router.push({
+        path: '/exchange'
+      })
+    },
     submit() {
       this.$refs.form.validate(async (valid) => {
         if (valid) {
@@ -145,6 +151,7 @@ export default {
           if (res.code === 0) {
             this.mnemonic = res.data.mnemonic
             this.step = 2
+            SetToken(res.data.access_token)
           } else {
             this.$message.error('something went wrong, please refresh the current page')
           }

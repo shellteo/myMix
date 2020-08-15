@@ -28,6 +28,7 @@ module.exports = {
       tokenNotExist: { code: 5000001, messaeg: 'token does not exist' },
       exchangeExist: { code: 5000002, messaeg: 'exchange already exist' },
       exchangeNotExist: { code: 5000003, messaeg: 'exchange does not exist' },
+      failed: { code: 6000001, messaeg: 'failed' },
     };
     let message;
 

@@ -213,7 +213,7 @@ button {
   display: flex;
   color: $purpleDark;
   text-align: center;
-  margin-top: 1rem;
+  // margin-top: 1rem;
   padding-top: 1rem;
   cursor: pointer;
   -webkit-box-align: center;
@@ -316,4 +316,10 @@ button {
 .hidden-border {
   border-bottom: none;
   border-top: none;
+}
+.css-1d6204x {
+  text-align: center;
+  color: #ccc;
+  margin-top: 20px;
+  font-size: 14px;
 }

@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { setCookie } from '@/utils'
+import { SetToken } from '@/utils'
 export default {
   data() {
     const validatePass = (rule, value, callback) => {
@@ -75,7 +75,10 @@ export default {
           })
           if (res.code === 0) {
             const accessToken = res.data.access_token
-            setCookie('ACCESS_TOKEN', accessToken, 7)
+            SetToken(accessToken)
+            this.$router.push({
+              path: '/exchange'
+            })
           }
         } else {
           return false

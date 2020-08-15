@@ -164,6 +164,12 @@
         <span v-else> - </span>
       </div>
     </div>
+    <div>
+      <div class="css-1d6204x">
+        Don't see a pool you joined?
+        <a id="import-pool-link" class="sc-cSHVUG AuDSD" href="javascript:void(0)" @click="ceShow=true">Import it.</a>
+      </div>
+    </div>
     <div
       v-if="!isDelete"
       class="mHVYT"
@@ -221,6 +227,9 @@
       v-model="psShow"
       @selectPool="selectPool"
     />
+    <CreateExModal
+      v-model="ceShow"
+    />
   </div>
 </template>
 
@@ -228,6 +237,7 @@
 import debounce from 'lodash/debounce'
 import TokenListModal from './TokenList'
 import PoolSelectModal from './PoolSelect'
+import CreateExModal from './CreateExModal'
 import { OKT, OUTPUT } from './consts.js'
 
 // import utils from '@/utils/index'
@@ -235,11 +245,13 @@ import { OKT, OUTPUT } from './consts.js'
 export default {
   components: {
     TokenListModal,
-    PoolSelectModal
+    PoolSelectModal,
+    CreateExModal
   },
   data() {
     return {
       psShow: false,
+      ceShow: false,
       detailShow: false,
       tlShow: false,
       field: '', // INPUT OUTPUT

@@ -2,7 +2,7 @@
 "use strict";
 
 import axios from "axios";
-import { getCookie } from './index'
+import { getToken } from './index'
 // import { removeCookie, clearAllCookie } from '@/utils/cookie'
 // import store from '@/utils/store.js'
 
@@ -24,7 +24,7 @@ const _axios = axios.create({
 // let loadingInstance = null;
 _axios.interceptors.request.use(
   (config) => {
-    if (getCookie('ACCESS_TOKEN')) config.headers['authorization'] = 'Bearer ' + getCookie('ACCESS_TOKEN');
+    if (getToken('ACCESS_TOKEN')) config.headers['authorization'] = 'Bearer ' + getToken('ACCESS_TOKEN');
     return config;
   },
   (error) => {

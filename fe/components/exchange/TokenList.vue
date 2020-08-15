@@ -37,7 +37,7 @@
             label="View Detail"
           >
             <template slot-scope="scope">
-              <a :href="'https://www.okex.com/okchain/v1/token/' + scope.row.token2_symbol" target="_blank">
+              <a :href="'https://www.oklink.com/okchain-test/token/' + scope.row.token2_symbol" target="_blank">
                 {{ scope.row.token2_symbol }}
               </a>
             </template>
@@ -126,8 +126,8 @@ export default {
 }
 .black-theme-dialog {
   max-width: 420px;
-  max-height: 70vh;
-  min-height: 70vh;
+  max-height: 50vh;
+  min-height: 50vh;
   border-radius: 20px;
   background-color: rgb(33, 36, 41);
   box-shadow: rgba(0, 0, 0, 0.05) 0px 4px 8px 0px;

@@ -5,11 +5,16 @@ const Controller = require('egg').Controller;
 class OkexController extends Controller {
   async queryTokenInfo() {
     const { ctx } = this;
-    const data = await ctx.service.okex.queryTokenInfo('zxt-20a');
-    ctx.body = {
-      ...ctx.msg.success,
-      data,
-    };
+    const { symbol } = ctx.query;
+    const data = await ctx.service.okex.queryTokenInfo(symbol);
+    if (data === null) {
+      ctx.body = ctx.msg.tokenNotExist;
+    } else {
+      ctx.body = {
+        ...ctx.msg.success,
+        data,
+      };
+    }
   }
   async keyList() {
     const { ctx } = this;
