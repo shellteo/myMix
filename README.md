@@ -1,4 +1,5 @@
 # MixSwap
+![cover](https://mixswap.oss-cn-hangzhou.aliyuncs.com/1.jpg)
 
 ## Introduction
 MixSwap is an on-chain system of smart contracts on the okchain blockchain, implementing an automated liquidity protocol based on a “constant product formula”. 
@@ -14,13 +15,18 @@ A small liquidity provider fee (0.30%) is taken out of each trade and added to t
 
 ![swap](https://mixswap.oss-cn-hangzhou.aliyuncs.com/swap.jpg)
 ![addLiquidity](https://mixswap.oss-cn-hangzhou.aliyuncs.com/addLiquidity.jpg)
+![4](https://mixswap.oss-cn-hangzhou.aliyuncs.com/4.jpg)
+![5](https://mixswap.oss-cn-hangzhou.aliyuncs.com/5.jpg)
+![6](https://mixswap.oss-cn-hangzhou.aliyuncs.com/6.jpg)
+![7](https://mixswap.oss-cn-hangzhou.aliyuncs.com/7.jpg)
+![8](https://mixswap.oss-cn-hangzhou.aliyuncs.com/8.jpg)
 
 ## Sign up And Sign In
 You can create a account using this system and sign in!
 
-![sign up](https://mixswap.oss-cn-hangzhou.aliyuncs.com/signup.jpg)
+![sign up](https://mixswap.oss-cn-hangzhou.aliyuncs.com/2.jpg)
 ![mnemonic](https://mixswap.oss-cn-hangzhou.aliyuncs.com/mnemonic.jpg)
-![sign in](https://mixswap.oss-cn-hangzhou.aliyuncs.com/signin.jpg)
+![sign in](https://mixswap.oss-cn-hangzhou.aliyuncs.com/3.jpg)
 
 
 ### Development
