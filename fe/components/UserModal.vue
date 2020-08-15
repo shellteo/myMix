@@ -27,6 +27,7 @@
         />
         <el-table-column
           prop="available"
+          width="200"
           label="Available"
         />
         <el-table-column
@@ -69,6 +70,10 @@ export default {
     },
     value(val) {
       this.showModal = val
+      if (val) {
+        this.account()
+        this.exchange()
+      }
     }
   },
   mounted() {

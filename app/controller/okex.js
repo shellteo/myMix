@@ -70,10 +70,20 @@ class OkexController extends Controller {
     };
   }
   async test1() {
-    const userExist1 = await this.service.user.find('tokt_zxt-20a_liquidity_holder');
-    const userExist2 = await this.service.user.find('1212');
-    console.log('userExist1: ', userExist1.address);
-    console.log('userExist2: ', userExist2);
+    const from = 'okchain1lawh36kjsgvxcx6659z84kj6lw2dgmkzquxfj3';
+    const to = 'okchain1kpyay37svm6gh5amzxsu59dtc4emwkan02dc3g';
+    const coins = [{
+      symbol: 'tokt',
+      amount: 8.95599319,
+    }, {
+      symbol: 'tusdk',
+      amount: 33.83081887,
+    }];
+    const result = await this.service.okex.multiTransfer(from, to, coins);
+    this.ctx.body = {
+      ...this.ctx.msg.success,
+      result,
+    };
   }
   async test2() {
     const { ctx } = this;
