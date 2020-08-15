@@ -70,29 +70,10 @@ class OkexController extends Controller {
     };
   }
   async test1() {
-    const { ctx } = this;
-    const token1_symbol = 'tokt';
-    const token2_symbol = 'zxt-20a';
-    const token1_amount = 10;
-    const token1_reserve = 200;
-    const exchange = await ctx.model.Exchange.findOne({
-      where: { token1_symbol, token2_symbol },
-      lock: this.app.Sequelize.Transaction.LOCK.UPDATE,
-    });
-    const transaction = await ctx.model.transaction({
-      isolationLevel: this.app.Sequelize.Transaction.ISOLATION_LEVELS.REPEATABLE_READ,
-    });
-    console.log('exchange:', exchange);
-    console.log(parseFloat(exchange.token1_amount) + 10);
-    const total_liquidity = 50;
-    const liquidity_minted = parseFloat(token1_amount * total_liquidity / token1_reserve);
-    await exchange.update({
-      token1_amount: total_liquidity + liquidity_minted,
-    }, {
-      transaction,
-    });
-    await transaction.commit();
-    ctx.body = ctx.msg.success;
+    const userExist1 = await this.service.user.find('tokt_zxt-20a_liquidity_holder');
+    const userExist2 = await this.service.user.find('1212');
+    console.log('userExist1: ', userExist1.address);
+    console.log('userExist2: ', userExist2);
   }
   async test2() {
     const { ctx } = this;

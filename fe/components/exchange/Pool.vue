@@ -150,7 +150,7 @@
       <div class="exKIZr" />
       <div class="lfiYXW">
         <span class="sc-hORach icyNSS">Price</span>
-        <span v-if="price">1 {{ form.outputToken.token2_symbol }} = {{ price }} okt</span>
+        <span v-if="price && outputReadOnly">1 {{ form.outputToken.token2_symbol }} = {{ price }} okt</span>
         <span v-else> - </span>
       </div>
       <div class="lfiYXW">
@@ -354,8 +354,10 @@ export default {
       this.form.input = value
       const { input, outputToken } = this.form
       if (input && outputToken.token2_symbol) {
-        // 获取输出token的数量
-        this.getTokenAmountByOkt(outputToken.token2_symbol, input)
+        if (this.outputReadOnly) {
+          // 获取输出token的数量
+          this.getTokenAmountByOkt(outputToken.token2_symbol, input)
+        }
         // 获取你能挖到的数量
         this.getMintLiquidityByOkt(outputToken.token2_symbol, input)
       }
@@ -372,13 +374,13 @@ export default {
       }
       /* ---------------------- 删除流动金逻辑结束 --------------------- */
     },
-    selectToken(token) {
+    async selectToken(token) {
       this.form[this.field] = token
       const symbol = token.token2_symbol
       // 获取个人占比
       this.getYourPoolSize(symbol)
       // 获取总池子大小
-      this.getCurrentPoolSize(symbol)
+      await this.getCurrentPoolSize(symbol)
       this.getPrice(symbol)
       if (this.field === OUTPUT) {
         this.getBalance(symbol, this.isDelete ? 'delete' : 'add')
@@ -393,8 +395,10 @@ export default {
         } else {
           const { input } = this.form
           if (input) {
-            // 获取输出token的数量
-            this.getTokenAmountByOkt(symbol, input)
+            if (this.outputReadOnly) {
+              // 获取输出token的数量
+              this.getTokenAmountByOkt(symbol, input)
+            }
             // 获取你能挖到的数量
             this.getMintLiquidityByOkt(symbol, input)
           }
@@ -486,11 +490,9 @@ export default {
         }
       })
       if (res.code === 0) {
-        this.outputReadOnly = true
         this.form.output = res.data
       } else {
         this.form.output = ''
-        this.outputReadOnly = false
       }
     },
     // 根据流动金数量获取 okt + token amount
@@ -526,6 +528,11 @@ export default {
       const res = await this.$request.get(`/api/exchange/info/${symbol}`)
       if (res.code === 0) {
         this.currentPoolSize = res.data
+        if (res.data.total_supply === 0) {
+          this.outputReadOnly = false
+        } else {
+          this.outputReadOnly = true
+        }
       }
     },
     // 根据输入的okt数量计算获取的流动金

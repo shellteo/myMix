@@ -23,21 +23,31 @@ class ExchangeService extends Service {
       return -2;
     }
     const username = this.getHolderUserName(symbol);
-    const userResult = await this.service.user.create({
-      username,
-      password: 'JJNTtwtKuslU2lRckmB9GkccsAv7X2zddJMoLmF6wgYeVFierG',
-    });
-    if (userResult.code !== 0) {
-      this.logger.error('ExchangeService::createExchange error user create error, symbol: %j', symbol);
-      return -3;
+    const userExist = await this.service.user.find(username);
+    let holder_username = '';
+    let holder_address = '';
+    if (userExist) {
+      holder_username = userExist.username;
+      holder_address = userExist.address;
+    } else {
+      const userResult = await this.service.user.create({
+        username,
+        password: 'JJNTtwtKuslU2lRckmB9GkccsAv7X2zddJMoLmF6wgYeVFierG',
+      });
+      if (userResult.code !== 0) {
+        this.logger.error('ExchangeService::createExchange error user create error, symbol: %j', symbol);
+        return -3;
+      }
+      holder_username = userResult.data.username;
+      holder_address = userResult.data.address;
     }
     const now = moment().format('YYYY-MM-DD HH:mm:ss');
     const result = await ctx.model.Exchange.create({
       token1_symbol: TOKT,
       token2_symbol: symbol,
       create_time: now,
-      holder_username: userResult.data.username,
-      holder_address: userResult.data.address,
+      holder_username,
+      holder_address,
     });
     ctx.logger.info('ExchangeService::createExchange result: %j', result);
     return result.id;
