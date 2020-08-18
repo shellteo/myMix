@@ -161,7 +161,7 @@ $width: 450px;
   /* margin: auto;
   position: relative;
   box-sizing: border-box; */
-  margin-top: 80px;
+  margin: 80px 0;
 }
 .p-w  {
   max-width: $width;

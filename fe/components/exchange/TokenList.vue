@@ -126,8 +126,6 @@ export default {
 }
 .black-theme-dialog {
   max-width: 420px;
-  max-height: 50vh;
-  min-height: 50vh;
   border-radius: 20px;
   background-color: rgb(33, 36, 41);
   box-shadow: rgba(0, 0, 0, 0.05) 0px 4px 8px 0px;
@@ -137,6 +135,8 @@ export default {
     font-size: 14px;
     word-break: break-all;
     background-color: rgb(33, 36, 41);
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
   }
   .el-dialog__title {
     line-height: 24px;
@@ -186,6 +186,8 @@ a {
   color: rgb(27, 149, 224);;
 }
 .container {
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
   .favMUS {
     width: 2rem;
     height: 2rem;
@@ -207,6 +209,8 @@ a {
   .cotdDw {
     flex-grow: 1;
     overflow-y: auto;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
   }
   .hDyKIS {
     display: flex;

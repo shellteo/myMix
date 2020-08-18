@@ -86,7 +86,7 @@ export default {
         }
       }
     }
-    const validateUsername = (rule, value, callback) => {
+    const validateUsername = async (rule, value, callback) => {
       if (value === '') {
         callback(new Error('Please enter username'))
       } else {
@@ -94,7 +94,16 @@ export default {
         if (!containsEightCharacters) {
           callback(new Error('Incorrect format:username length need >= 6!'))
         } else {
-          callback()
+          const res = await this.$request.get('/api/user/getByUsername', {
+            params: {
+              username: value
+            }
+          })
+          if (res.code === 0) {
+            callback(new Error('The username already exist'))
+          } else {
+            callback()
+          }
         }
       }
     }
@@ -152,6 +161,7 @@ export default {
             this.mnemonic = res.data.mnemonic
             this.step = 2
             SetToken(res.data.access_token)
+            this.$message.success('account create succeed, please save mnemonics somewhere safe and secret. ')
           } else {
             this.$message.error('something went wrong, please refresh the current page')
           }

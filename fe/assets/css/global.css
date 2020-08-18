@@ -29,3 +29,8 @@ a {
 /* .el-message .el-icon-error, .el-message .el-message__content  {
     color: #d93025!important;
 } */
+
+
+.create-ex-modal {
+    min-height: 60vh;
+}

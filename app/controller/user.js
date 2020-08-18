@@ -93,6 +93,16 @@ class UserController extends Controller {
       };
     }
   }
+  async getByUsername() {
+    const { ctx } = this;
+    const { username } = ctx.query;
+    const userRow = await ctx.service.user.find(username);
+    if (userRow === null) {
+      ctx.body = ctx.msg.failed;
+    } else {
+      ctx.body = ctx.msg.success;
+    }
+  }
   async update() {
     const { ctx } = this;
     const username = ctx.user.username;

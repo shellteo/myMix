@@ -41,11 +41,20 @@ export default {
         callback()
       }
     }
-    const validateUsername = (rule, value, callback) => {
+    const validateUsername = async (rule, value, callback) => {
       if (value === '') {
         callback(new Error('Please enter username'))
       } else {
-        callback()
+        const res = await this.$request.get('/api/user/getByUsername', {
+          params: {
+            username: value
+          }
+        })
+        if (res.code === 0) {
+          callback()
+        } else {
+          callback(new Error('The username not exist'))
+        }
       }
     }
     return {
@@ -79,6 +88,8 @@ export default {
             this.$router.push({
               path: '/exchange'
             })
+          } else {
+            this.$message.error('the username or password not correct!')
           }
         } else {
           return false

@@ -2,7 +2,7 @@
   <el-dialog
     :visible.sync="showModal"
     :modal="true"
-    custom-class="black-theme-dialog user-modal"
+    custom-class="black-theme-dialog create-ex-modal"
     title="Create Exchange"
   >
     <div class="ce-container">

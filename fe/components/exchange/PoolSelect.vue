@@ -3,7 +3,6 @@
     :close-on-click-modal="false"
     :visible.sync="showModal"
     :lock-scroll="false"
-    width="450px"
     custom-class="br10 black-theme-dialog pool-select"
   >
     <div class="container br10">
@@ -80,6 +79,8 @@ $purpleDark: #ccc;
   height: 100%;
   box-sizing: border-box;
   padding: 2rem 2rem;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
   .cwefbr.MODE {
     background-color: rgb(44, 47, 54);
     font-weight: 500;

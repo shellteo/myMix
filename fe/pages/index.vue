@@ -13,7 +13,7 @@
         </div>
       </div>
       <n-link
-        :to="{ path: 'wallet#sign_up' }"
+        :to="{ path: 'exchange' }"
       >
         <p class="title">👉 go to app</p>
       </n-link>
