@@ -14,7 +14,9 @@
             <i class="el-icon-link" />View on OkChain
           </a>
         </div>
-        <a href="https://www.okex.com/drawdex" target="_blank">Claim DEX test token</a>
+        <div>
+          <a href="https://www.okex.com/drawdex" target="_blank">Claim DEX test token</a>
+        </div>
       </div>
       <el-table
         :data="coins"
