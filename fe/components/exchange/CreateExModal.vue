@@ -63,7 +63,9 @@
             </li>
           </ul>
           <div class="ce-btn">
-            <el-button plain @click="createExchange">Create Exchange</el-button>
+            <el-button plain :disabled="exchangeExist" @click="createExchange">
+              {{ exchangeExist ? 'Exchange Already Exist' : 'Create Exchange' }}
+            </el-button>
           </div>
         </div>
       </div>
@@ -95,7 +97,8 @@ export default {
         mintable: true
       },
       resultType: 1,
-      loading: false
+      loading: false,
+      exchangeExist: false
     }
   },
   computed: {
@@ -135,12 +138,18 @@ export default {
           symbol
         }
       })
+      const exs = await this.$request.get(`api/exchange/info/${symbol}`)
       this.loading = false
       if (res.code === 0) {
         this.resultType = 3
         this.token = res.data
       } else {
         this.resultType = 2
+      }
+      if (exs.code === 0) {
+        this.exchangeExist = true
+      } else {
+        this.exchangeExist = false
       }
     },
     async createExchange() {
