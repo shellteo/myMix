@@ -1,4 +1,4 @@
-import { ethers } from 'ethers'
+/* import { ethers } from 'ethers'
 
 export function shortenAddress(address, digits = 4) {
   if (!isAddress(address)) {
@@ -12,7 +12,7 @@ export function isAddress(value) {
   } catch {
     return false
   }
-}
+} */
 export function isEmptyAddress(address) {
   return address === '0x0000000000000000000000000000000000000000'
 }
