@@ -72,7 +72,7 @@ class OkexService extends Service {
     return this.genPromise(cmd);
   }
   async queryAccountBalance(address, symbol) {
-    const url = `https://www.okex.com/okchain/v1/accounts/${address}?symbol=${symbol}`;
+    const url = `${this.config.okexApiUrl}/okchain/v1/accounts/${address}?symbol=${symbol}`;
     console.log(url);
     const result = await this.app.curl(url, {
       method: 'GET',
@@ -87,7 +87,7 @@ class OkexService extends Service {
     return 0;
   }
   async queryAccountFromAPI(address) {
-    const url = `https://www.okex.me/okchain/v1/accounts/${address}`;
+    const url = `${this.config.okexApiUrl}/okchain/v1/accounts/${address}`;
     const result = await this.app.curl(url, {
       method: 'GET',
       dataType: 'json',
