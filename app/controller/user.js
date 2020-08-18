@@ -172,8 +172,7 @@ class UserController extends Controller {
 
     const username = ctx.user.username;
     const balance = await this.service.exchangeBalance.find(username, symbol);
-    const user_liquidity = parseFloat(balance.liquidity_balance);
-    if (balance === null || user_liquidity <= 0 || total_liquidity <= 0) {
+    if (balance === null || total_liquidity <= 0) {
       ctx.body = {
         ...ctx.msg.success,
         data: {
@@ -184,6 +183,7 @@ class UserController extends Controller {
       };
       return;
     }
+    const user_liquidity = parseFloat(balance.liquidity_balance);
 
     const address = exchange.holder_address;
     const token_reserve = await this.service.okex.queryAccountBalance(address, symbol);
