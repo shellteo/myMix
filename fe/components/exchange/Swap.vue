@@ -263,6 +263,10 @@ export default {
         this.$message.error('Please select a token to continue.')
         return
       }
+      if (inputToken.token2_symbol !== OKT.token2_symbol && outputToken.token2_symbol !== OKT.token2_symbol) {
+        this.$message.error('At least one of the input and output is okt to continue.')
+        return
+      }
       this.$store.commit('SET_PAGE_LOADING', true)
       let res = null
       if (inputToken.token2_symbol === OKT.token2_symbol) {
