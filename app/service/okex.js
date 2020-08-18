@@ -72,7 +72,7 @@ class OkexService extends Service {
     return this.genPromise(cmd);
   }
   async queryAccountBalance(address, symbol) {
-    const url = `https://www.okex.me/okchain/v1/accounts/${address}?symbol=${symbol}`;
+    const url = `https://www.okex.com/okchain/v1/accounts/${address}?symbol=${symbol}`;
     console.log(url);
     const result = await this.app.curl(url, {
       method: 'GET',
