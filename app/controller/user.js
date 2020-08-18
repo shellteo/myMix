@@ -180,15 +180,15 @@ class UserController extends Controller {
     const okt_reserve = await this.service.okex.queryAccountBalance(address, 'tokt');
 
     // 根据用户remove的amount数量计算出cny数量
-    const okt_amount = parseFloat(okt_reserve * user_liquidity / total_liquidity);
+    const okt_amount = parseFloat((okt_reserve * user_liquidity / total_liquidity).toFixed(8));
     // 计算出token数量
-    const token_amount = parseFloat(token_reserve * user_liquidity / total_liquidity);
+    const token_amount = parseFloat((token_reserve * user_liquidity / total_liquidity).toFixed(8));
     ctx.body = {
       ...ctx.msg.success,
       data: {
         okt_amount,
         token_amount,
-        user_liquidity,
+        user_liquidity: parseFloat(user_liquidity.toFixed(8)),
       },
     };
   }
