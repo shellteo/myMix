@@ -9,7 +9,7 @@
           <i class="el-icon-close close-i"></i>
         </div>
         <div class="logo">
-          <img src="https://static.okex.com/cdn/assets/imgs/MjAyMDQ/4EBF3CA036E43F3385FE33C3EEE3667C.png" alt="">
+          <img src="https://mixswap.oss-cn-hangzhou.aliyuncs.com/okex_logo.png" alt="">
         </div>
       </div>
       <n-link
